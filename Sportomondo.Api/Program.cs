@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Sportomondo.Api.Context;
+
 namespace Sportomondo.Api
 {
     public class Program
@@ -7,6 +10,9 @@ namespace Sportomondo.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<SportomondoDbContext>
+                (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
