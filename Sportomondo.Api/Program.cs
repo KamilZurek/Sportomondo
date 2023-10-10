@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Seeders;
+using Sportomondo.Api.Services;
 
 namespace Sportomondo.Api
 {
@@ -14,11 +16,22 @@ namespace Sportomondo.Api
             builder.Services.AddDbContext<SportomondoDbContext>
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
+            builder.Services.AddScoped<DataSeeder>();
+            builder.Services.AddScoped<IActivityService, ActivityService>();
+            
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            var scope = app.Services.CreateScope();
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+            
+            dataSeeder.ApplyPendingMigrations();
+            dataSeeder.Seed();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
