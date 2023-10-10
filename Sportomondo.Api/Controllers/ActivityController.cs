@@ -23,7 +23,7 @@ namespace Sportomondo.Api.Controllers
             var activities = await _service.GetAll();
             var results = activities.Select(a => a.MapToResponse());
 
-            return Ok(activities);
+            return Ok(results);
         }
 
         #region later
