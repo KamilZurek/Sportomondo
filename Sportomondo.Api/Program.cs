@@ -12,14 +12,14 @@ namespace Sportomondo.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddHttpClient();
             builder.Services.AddDbContext<SportomondoDbContext>
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
+            builder.Services.AddScoped<ICreateActivityService, CreateActivityService>();
             
-
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -31,7 +31,6 @@ namespace Sportomondo.Api
             
             dataSeeder.ApplyPendingMigrations();
             dataSeeder.Seed();
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

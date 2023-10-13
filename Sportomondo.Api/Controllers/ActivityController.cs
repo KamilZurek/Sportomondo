@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sportomondo.Api.Mapping;
 using Sportomondo.Api.Models;
+using Sportomondo.Api.Requests;
 using Sportomondo.Api.Responses;
 using Sportomondo.Api.Services;
 
@@ -20,10 +21,18 @@ namespace Sportomondo.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActivityResponse>>> GetAll()
         {
-            var activities = await _service.GetAll();
+            var activities = await _service.GetAllAsync();
             var results = activities.Select(a => a.MapToResponse());
 
             return Ok(results);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create([FromBody] CreateActivityRequest request)
+        {
+            var createdId = await _service.CreateAsync(request);
+
+            return Created($"api/activities/{createdId}", null);
         }
 
         #region later
@@ -32,12 +41,6 @@ namespace Sportomondo.Api.Controllers
         //public string Get(int id)
         //{
         //    return "value";
-        //}
-
-        //// POST api/<ActivityController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
         //}
 
         //// PUT api/<ActivityController>/5

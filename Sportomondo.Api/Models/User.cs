@@ -11,5 +11,6 @@ namespace Sportomondo.Api.Models
         public DateTime DateOfBirth { get; set; }
         public decimal Weight { get; set; }
         public ICollection<Activity> Activities { get; set; }
+        //password etc
     }
 }
