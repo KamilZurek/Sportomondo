@@ -7,5 +7,6 @@ namespace Sportomondo.Api.Services
     {
         Task<IEnumerable<Activity>> GetAllAsync();
         Task<int> CreateAsync(CreateActivityRequest activity);
+        Task<Activity> GetByIdAsync(int id);
     }
 }

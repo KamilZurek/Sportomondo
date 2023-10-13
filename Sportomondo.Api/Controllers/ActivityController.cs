@@ -27,6 +27,15 @@ namespace Sportomondo.Api.Controllers
             return Ok(results);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ActivityResponse>> Get([FromRoute]int id)
+        {
+            var activity = await _service.GetByIdAsync(id);
+            var result = activity.MapToResponse();
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateActivityRequest request)
         {
@@ -36,12 +45,6 @@ namespace Sportomondo.Api.Controllers
         }
 
         #region later
-        //// GET api/<ActivityController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
         //// PUT api/<ActivityController>/5
         //[HttpPut("{id}")]
