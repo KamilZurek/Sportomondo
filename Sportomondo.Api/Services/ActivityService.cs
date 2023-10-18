@@ -28,15 +28,7 @@ namespace Sportomondo.Api.Services
 
         public async Task<Activity> GetByIdAsync(int id)
         {
-            var activity = await _dbContext.Activities
-                .Include(a => a.Weather)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(a => a.Id == id);
-
-            if (activity == null)
-            {
-                throw new Exception($"There is no activity with id: {id}");
-            }
+            var activity = await GetFromDbAsync(id);
 
             return activity;
         }
@@ -58,6 +50,29 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
 
             return newActivity.Id;
-        } 
+        }
+        
+        public async Task DeleteAsync(int id)
+        {
+            var activity = await GetFromDbAsync(id);
+
+            _dbContext.Activities.Remove(activity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task<Activity> GetFromDbAsync(int id)
+        {
+            var activity = await _dbContext.Activities
+                .Include(a => a.Weather)
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (activity == null)
+            {
+                throw new Exception($"There is no activity with id: {id}");
+            }
+
+            return activity;
+        }
     }
 }

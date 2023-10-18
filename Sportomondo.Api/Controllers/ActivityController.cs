@@ -44,6 +44,14 @@ namespace Sportomondo.Api.Controllers
             return Created($"api/activities/{createdId}", null);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete([FromRoute]int id)
+        {
+            await _service.DeleteAsync(id);
+            
+            return NoContent();
+        }
+
         #region later
 
         //// PUT api/<ActivityController>/5
@@ -52,11 +60,7 @@ namespace Sportomondo.Api.Controllers
         //{
         //}
 
-        //// DELETE api/<ActivityController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+
         #endregion
     }
 }
