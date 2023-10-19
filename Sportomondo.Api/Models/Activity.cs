@@ -20,5 +20,10 @@ namespace Sportomondo.Api.Models
         public int UserId { get; set; }
         public User User { get; set; } // = null!;
         //czy pprop tylko GET tez doda do db?
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, {Name}";
+        }
     }
 }

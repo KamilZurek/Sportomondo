@@ -28,7 +28,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ActivityResponse>> Get([FromRoute]int id)
+        public async Task<ActionResult<ActivityResponse>> Get([FromRoute] int id)
         {
             var activity = await _service.GetByIdAsync(id);
             var result = activity.MapToResponse();
@@ -45,22 +45,19 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]int id)
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
             await _service.DeleteAsync(id);
             
             return NoContent();
         }
 
-        #region later
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] ActivityRequest request)
+        {
+            await _service.UpdateAsync(id, request);
 
-        //// PUT api/<ActivityController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-
-        #endregion
+            return Ok();
+        }
     }
 }
