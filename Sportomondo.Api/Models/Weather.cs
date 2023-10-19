@@ -9,5 +9,10 @@
         public string Description { get; set; }
         public int ActivityId { get; set; }
         public Activity Activity { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, {City} {TemperatureC}*C";
+        }
     }
 }

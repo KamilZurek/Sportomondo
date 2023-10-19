@@ -12,5 +12,10 @@ namespace Sportomondo.Api.Models
         public decimal Weight { get; set; }
         public ICollection<Activity> Activities { get; set; }
         //password etc
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, {FirstName} {LastName}";
+        }
     }
 }

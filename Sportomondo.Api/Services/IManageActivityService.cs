@@ -3,7 +3,7 @@ using Sportomondo.Api.Requests;
 
 namespace Sportomondo.Api.Services
 {
-    public interface ICreateActivityService
+    public interface IManageActivityService
     {
         Activity CreateFromRequestData(CreateActivityRequest request);
         void CalculateTime(Activity activity);

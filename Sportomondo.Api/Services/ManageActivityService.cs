@@ -6,12 +6,12 @@ using System.Web;
 
 namespace Sportomondo.Api.Services
 {
-    public class CreateActivityService : ICreateActivityService
+    public class ManageActivityService : IManageActivityService
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreateActivityService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public ManageActivityService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;

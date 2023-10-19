@@ -18,7 +18,7 @@ namespace Sportomondo.Api
 
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
-            builder.Services.AddScoped<ICreateActivityService, CreateActivityService>();
+            builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
             
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
