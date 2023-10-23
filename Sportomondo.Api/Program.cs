@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Models;
 using Sportomondo.Api.Seeders;
 using Sportomondo.Api.Services;
 
@@ -17,6 +19,7 @@ namespace Sportomondo.Api
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
             builder.Services.AddScoped<DataSeeder>();
+            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
             

@@ -1,0 +1,93 @@
+[
+  {
+    "Name": "Activity_GetAll",
+    "Description": "Get all users' activities",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Activity_GetAll",
+    "Description": "Get all users' activities",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Activity_GetAll",
+    "Description": "Get all users' activities",
+    "Enabled": false,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Activity_Get",
+    "Description": "Get activity by Id",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Activity_Get",
+    "Description": "Get activity by Id",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Activity_Get",
+    "Description": "Get activity by Id",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Activity_Create",
+    "Description": "Create activity",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Activity_Create",
+    "Description": "Create activity",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Activity_Create",
+    "Description": "Create activity",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Activity_Delete",
+    "Description": "Delete activity by Id",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Activity_Delete",
+    "Description": "Delete activity by Id",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Activity_Delete",
+    "Description": "Delete activity by Id",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Activity_Update",
+    "Description": "Update activity by Id",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Activity_Update",
+    "Description": "Update activity by Id",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Activity_Update",
+    "Description": "Update activity by Id",
+    "Enabled": true,
+    "RoleName": "Member"
+  }
+]
+
