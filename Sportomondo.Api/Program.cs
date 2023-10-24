@@ -22,7 +22,8 @@ namespace Sportomondo.Api
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
-            
+            builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
