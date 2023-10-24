@@ -88,6 +88,114 @@
     "Description": "Update activity by Id",
     "Enabled": true,
     "RoleName": "Member"
+  },
+  {
+    "Name": "User_Register",
+    "Description": "Create user",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_Register",
+    "Description": "Create user",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_Register",
+    "Description": "Create user",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "User_Login",
+    "Description": "Log in user",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_Login",
+    "Description": "Log in user",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_Login",
+    "Description": "Log in user",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "User_ChangePassword",
+    "Description": "Change user's password",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_ChangePassword",
+    "Description": "Change user's password",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_ChangePassword",
+    "Description": "Change user's password",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "User_GetAll",
+    "Description": "Get all users",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_GetAll",
+    "Description": "Get all users",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_GetAll",
+    "Description": "Get all users",
+    "Enabled": false,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "User_Delete",
+    "Description": "Delete user by Id",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_Delete",
+    "Description": "Delete user by Id",
+    "Enabled": false,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_Delete",
+    "Description": "Delete user by Id",
+    "Enabled": false,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "User_ChangeRole",
+    "Description": "Change user's role",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "User_ChangeRole",
+    "Description": "Change user's role",
+    "Enabled": false,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "User_ChangeRole",
+    "Description": "Change user's role",
+    "Enabled": false,
+    "RoleName": "Member"
   }
 ]
 
