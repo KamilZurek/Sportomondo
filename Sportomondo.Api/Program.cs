@@ -1,9 +1,14 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Models;
+using Sportomondo.Api.Requests;
+using Sportomondo.Api.Requests.Validators;
 using Sportomondo.Api.Seeders;
 using Sportomondo.Api.Services;
+using System;
 
 namespace Sportomondo.Api
 {
@@ -23,8 +28,11 @@ namespace Sportomondo.Api
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
             builder.Services.AddScoped<IUserService, UserService>();
-
             builder.Services.AddControllers();
+            builder.Services.AddFluentValidationAutoValidation();
+
+            builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
