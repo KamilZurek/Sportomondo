@@ -46,6 +46,8 @@ namespace Sportomondo.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
+            await _userService.DeleteAsync(id);
+
             return NoContent();
         }
 

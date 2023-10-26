@@ -60,7 +60,10 @@ namespace Sportomondo.Api.Services
 
         public async Task DeleteAsync(int id)
         {
+            var user = await GetUserFromDbAsync(id);
 
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task ChangeRoleAsync(int userId, string newRoleName)
@@ -78,6 +81,7 @@ namespace Sportomondo.Api.Services
         {
             var user = await _dbContext.Users
                 .Include(u => u.Role)
+                .Include(u => u.Activities)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
