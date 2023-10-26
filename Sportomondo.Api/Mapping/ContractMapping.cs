@@ -26,5 +26,18 @@ namespace Sportomondo.Api.Mapping
                 UserId = activity.UserId
             };
         }
+
+        public static UserResponse MapToResponse(this User user)
+        {
+            return new UserResponse()
+            {
+                Id = user.Id,
+                Name = user.FirstName + " " + user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                Weight = user.Weight,
+                Role = user.Role.Name,
+                ActivitiesCount = user.Activities.Count
+            };
+        }
     }
 }

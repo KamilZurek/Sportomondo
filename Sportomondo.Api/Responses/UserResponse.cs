@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
         public decimal Weight { get; set; }
-        public int RoleId { get; set; }
+        public string Role { get; set; }
         public int ActivitiesCount { get; set; }
     }
 }

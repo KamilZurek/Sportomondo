@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sportomondo.Api.Mapping;
 using Sportomondo.Api.Requests;
 using Sportomondo.Api.Responses;
 using Sportomondo.Api.Services;
@@ -40,7 +41,10 @@ namespace Sportomondo.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAll()
         {
-            return NoContent();
+            var users = await _userService.GetAllAsync();
+            var results = users.Select(u => u.MapToResponse());
+
+            return Ok(results);
         }
 
         [HttpDelete("{id}")]
