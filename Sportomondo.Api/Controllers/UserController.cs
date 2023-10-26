@@ -31,7 +31,7 @@ namespace Sportomondo.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost("changePassword")]
+        [HttpPut("changePassword")]
         public async Task<ActionResult> ChangePassword([FromBody] ChangeUserPasswordRequest request)
         {
             return NoContent();
@@ -49,10 +49,12 @@ namespace Sportomondo.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/changeRole")]
+        [HttpPut("{id}/changeRole")]
         public async Task<ActionResult> ChangeRole([FromRoute] int id, [FromBody] string newRoleName)
         {
-            return NoContent();
+            await _userService.ChangeRoleAsync(id, newRoleName);
+
+            return Ok();
         }
     }
 }

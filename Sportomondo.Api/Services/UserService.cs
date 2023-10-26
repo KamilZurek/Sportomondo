@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
@@ -62,9 +63,42 @@ namespace Sportomondo.Api.Services
 
         }
 
-        public async Task ChangeRoleAsync(int id, string newRoleName)
+        public async Task ChangeRoleAsync(int userId, string newRoleName)
         {
-            
+            var user = await GetUserFromDbAsync(userId);
+
+            var newRole = await GetRoleFromDbAsync(newRoleName);
+
+            user.RoleId = newRole.Id;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task<User> GetUserFromDbAsync(int id)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                throw new Exception($"There is no user wit Id: {id}");
+            }
+
+            return user;
+        }
+
+        private async Task<Role> GetRoleFromDbAsync(string roleName)
+        {
+            var role = await _dbContext.Roles
+                    .FirstOrDefaultAsync(x => x.Name == roleName);
+
+            if (role == null)
+            {
+                throw new Exception($"There is no role wit Name: {roleName}");
+            }
+
+            return role;
         }
     }
 }
