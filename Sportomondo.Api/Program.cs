@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Middlewares;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
 using Sportomondo.Api.Requests.Validators;
@@ -24,6 +25,7 @@ namespace Sportomondo.Api
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
             builder.Services.AddScoped<DataSeeder>();
+            builder.Services.AddScoped<ExceptionHandlingMiddleware>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
@@ -43,6 +45,8 @@ namespace Sportomondo.Api
             
             dataSeeder.ApplyPendingMigrations();
             dataSeeder.Seed();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>(); //it should be the first one - https://www.c-sharpcorner.com/article/overview-of-middleware-in-asp-net-core/
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
