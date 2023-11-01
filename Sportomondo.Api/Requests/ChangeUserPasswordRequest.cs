@@ -7,6 +7,7 @@ namespace Sportomondo.Api.Requests
         [Required]
         public string OldPassword { get; set; }
         [Required]
+        [MinLength(5)]
         public string NewPassword { get; set; }
     }
 }
