@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
 
@@ -48,9 +49,28 @@ namespace Sportomondo.Api.Services
             return "";
         }
 
-        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request)
+        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request) //tests!
         {
-            
+            //get current user
+            User user = null;
+
+            var verifactionResultWithOldP = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
+
+            if (verifactionResultWithOldP == PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("'Old password' and current password are not the same");
+            }
+
+            var verifactionResultWithNewP = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.NewPassword);
+
+            if (verifactionResultWithNewP != PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("'New password' and current password cannot be the same");
+            }
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()

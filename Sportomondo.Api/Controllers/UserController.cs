@@ -35,7 +35,9 @@ namespace Sportomondo.Api.Controllers
         [HttpPut("changePassword")]
         public async Task<ActionResult> ChangePassword([FromBody] ChangeUserPasswordRequest request)
         {
-            return NoContent();
+            await _userService.ChangePasswordAsync(request);
+
+            return Ok();
         }
 
         [HttpGet]
