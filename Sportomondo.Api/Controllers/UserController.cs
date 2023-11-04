@@ -27,9 +27,11 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
+        public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request)
         {
-            return NoContent();
+            var token = await _userService.LoginAsync(request);
+
+            return Ok(token);
         }
 
         [HttpPut("changePassword")]

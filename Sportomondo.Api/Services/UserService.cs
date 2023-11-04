@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
+using Sportomondo.Api.Responses;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Sportomondo.Api.Services
 {
@@ -11,11 +16,13 @@ namespace Sportomondo.Api.Services
     {
         private readonly SportomondoDbContext _dbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IConfiguration _configuration;
 
-        public UserService(SportomondoDbContext dbContext, IPasswordHasher<User> passwordHasher)
+        public UserService(SportomondoDbContext dbContext, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -44,9 +51,40 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<string> LoginAsync(LoginUserRequest request)
+        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request)
         {
-            return "";
+            var user = await GetUserFromDbAsync(request.Email);
+
+            var passwordVerifactionResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+            if (passwordVerifactionResult == PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("Wrong password");
+            }
+
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+                new Claim(ClaimTypes.Role, user.Role.Name)
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddMinutes(15);
+
+            var token = new JwtSecurityToken(_configuration.GetValue<string>("Jwt:Issuer"),
+                _configuration.GetValue<string>("Jwt:Audience"),
+                claims,
+                expires: expires,
+                signingCredentials: credentials);
+
+            return new LoginUserResponse()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expires
+            };
         }
 
         public async Task ChangePasswordAsync(ChangeUserPasswordRequest request) //tests!
@@ -111,7 +149,22 @@ namespace Sportomondo.Api.Services
 
             if (user == null)
             {
-                throw new Exception($"There is no user wit Id: {id}");
+                throw new Exception($"There is no user with Id: {id}");
+            }
+
+            return user;
+        }
+
+        private async Task<User> GetUserFromDbAsync(string email)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.Role)
+                .Include(u => u.Activities)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                throw new Exception($"There is no user with email: {email}");
             }
 
             return user;

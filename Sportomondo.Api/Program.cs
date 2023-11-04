@@ -1,7 +1,9 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Middlewares;
 using Sportomondo.Api.Models;
@@ -10,6 +12,7 @@ using Sportomondo.Api.Requests.Validators;
 using Sportomondo.Api.Seeders;
 using Sportomondo.Api.Services;
 using System;
+using System.Text;
 
 namespace Sportomondo.Api
 {
@@ -23,6 +26,23 @@ namespace Sportomondo.Api
             builder.Services.AddHttpClient();
             builder.Services.AddDbContext<SportomondoDbContext>
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   //options.RequireHttpsMetadata = false,
+                   //options.SaveToken = true;
+                   options.TokenValidationParameters = new TokenValidationParameters()
+                   {
+                       ValidateIssuer = true,
+                       ValidateAudience = true,
+                       ValidateLifetime = true,
+                       ValidateIssuerSigningKey = true,
+                       ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                       ValidAudience = builder.Configuration["Jwt:Audience"],
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                   };
+               });
 
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();
@@ -56,6 +76,8 @@ namespace Sportomondo.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
