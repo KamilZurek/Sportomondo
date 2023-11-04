@@ -24,6 +24,7 @@ namespace Sportomondo.Api
 
             // Add services to the container.
             builder.Services.AddHttpClient();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<SportomondoDbContext>
                 (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SportomondoDbConnection")));
 
@@ -46,6 +47,7 @@ namespace Sportomondo.Api
 
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();
+            builder.Services.AddScoped<IHttpContextService, HttpContextService>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
