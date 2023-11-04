@@ -1,4 +1,5 @@
 ﻿using Microsoft.Net.Http.Headers;
+using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
 using System.Text.Json;
@@ -33,22 +34,22 @@ namespace Sportomondo.Api.Services
             };
         }
 
-        public void CalculateTime(Activity activity) //inny Exc?
+        public void CalculateTime(Activity activity)
         {
             if (activity.DateStart >= activity.DateFinish)
             {
-                throw new Exception($"Cannot register activity. DateStart: {activity.DateStart} " +
+                throw new BadRequestException($"Cannot register activity. DateStart: {activity.DateStart} " +
                     $"should be less than DateFinish: {activity.DateFinish}.");
             }
 
             activity.Time = activity.DateFinish - activity.DateStart;
         }
 
-        public void CalculatePace(Activity activity) //inny Exc?
+        public void CalculatePace(Activity activity)
         {
             if (activity.Time <= TimeSpan.Zero || activity.Distance <= 0m)
             {
-                throw new Exception($"Cannot register activity. Time: {activity.Time} " +
+                throw new BadRequestException($"Cannot register activity. Time: {activity.Time} " +
                     $"and Distance: {activity.Distance} should be greater than 0.");
             }
 
@@ -87,13 +88,13 @@ namespace Sportomondo.Api.Services
                     }
                     catch
                     {
-                        throw new Exception("Invalid WeatherAPI Json structure");
+                        throw new BadRequestException("Invalid WeatherAPI Json structure");
                     }
                 }
             }
             else
             {
-                throw new Exception("Cannot get the weather from WeatherAPI");
+                throw new BadRequestException("Cannot get the weather from WeatherAPI");
             }
         }
 

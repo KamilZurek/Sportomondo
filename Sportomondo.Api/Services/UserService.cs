@@ -31,9 +31,13 @@ namespace Sportomondo.Api.Services
         /// </summary>
         public async Task RegisterAsync(RegisterUserRequest request)
         {
-            var memberRoleId = _dbContext.Roles
-               .First(x => x.Name == "Member")
-               .Id;
+            var memberRole = _dbContext.Roles
+               .FirstOrDefault(x => x.Name == "Member");
+
+            if (memberRole == null)
+            {
+                throw new NotFoundException("Missing role 'Member' in database - cannot register user");
+            }
 
             var user = new User()
             {
@@ -42,7 +46,7 @@ namespace Sportomondo.Api.Services
                 LastName = request.LastName,
                 DateOfBirth = request.DateOfBirth,
                 Weight = request.Weight,
-                RoleId = memberRoleId
+                RoleId = memberRole.Id
             };
             
             user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
@@ -149,7 +153,7 @@ namespace Sportomondo.Api.Services
 
             if (user == null)
             {
-                throw new Exception($"There is no user with Id: {id}");
+                throw new NotFoundException($"There is no user with Id: {id}");
             }
 
             return user;
@@ -164,7 +168,7 @@ namespace Sportomondo.Api.Services
 
             if (user == null)
             {
-                throw new Exception($"There is no user with email: {email}");
+                throw new NotFoundException($"There is no user with email: {email}");
             }
 
             return user;
@@ -177,7 +181,7 @@ namespace Sportomondo.Api.Services
 
             if (role == null)
             {
-                throw new Exception($"There is no role wit Name: {roleName}");
+                throw new NotFoundException($"There is no role wit Name: {roleName}");
             }
 
             return role;

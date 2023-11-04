@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
 
@@ -36,7 +37,7 @@ namespace Sportomondo.Api.Services
         public async Task<int> CreateAsync(CreateActivityRequest request)
         {
             var user = await _dbContext.Users
-                .FirstAsync(u => u.Id == request.UserId);
+                .FirstAsync(u => u.Id == request.UserId); //tu zalogowany user
             
             var newActivity = _manageActivityService.CreateFromRequestData(request);
 
@@ -106,7 +107,7 @@ namespace Sportomondo.Api.Services
 
             if (activity == null)
             {
-                throw new Exception($"There is no activity with id: {id}");
+                throw new NotFoundException($"There is no activity with id: {id}");
             }
 
             return activity;

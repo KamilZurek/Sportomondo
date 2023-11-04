@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
+using System.Data;
 using System.Text.Json;
 
 namespace Sportomondo.Api.Seeders
@@ -120,16 +122,20 @@ namespace Sportomondo.Api.Seeders
 
             foreach (var item in dataFromJson)
             {
-                var roleId = _dbContext.Roles
-                    .First(x => x.Name == item.RoleName)
-                    .Id;
+                var role = _dbContext.Roles
+                    .FirstOrDefault(x => x.Name == item.RoleName);
+
+                if (role == null)
+                {
+                    throw new Exception($"Missing role '{item.RoleName}' in database - cannot seed role permissions");
+                }
 
                 var rolePermission = new RolePermission()
                 {
                     Name = item.Name,
                     Description = item.Description,
                     Enabled = item.Enabled,
-                    RoleId = roleId
+                    RoleId = role.Id
                 };
 
                 results.Add(rolePermission);
@@ -140,9 +146,14 @@ namespace Sportomondo.Api.Seeders
 
         private IEnumerable<User> GetUsersToSeed()
         {
-            var adminRoleId = _dbContext.Roles
-                .First(x => x.Name == "Admin")
-                .Id;
+            var adminRole = _dbContext.Roles
+                .FirstOrDefault(x => x.Name == "Admin");
+
+            if (adminRole == null)
+            {
+                throw new Exception($"Missing role 'Admin' in database - cannot seed users");
+            }
+
             var adminEmail = _configuration.GetValue<string>("BaseAdminEmail");
 
             var admin = new User()
@@ -152,7 +163,7 @@ namespace Sportomondo.Api.Seeders
                 LastName = "Main",
                 DateOfBirth = new DateTime(1995, 2, 27),
                 Weight = 109.0m,
-                RoleId = adminRoleId
+                RoleId = adminRole.Id
             };
 
             admin.PasswordHash = _passwordHasher.HashPassword(admin, 
