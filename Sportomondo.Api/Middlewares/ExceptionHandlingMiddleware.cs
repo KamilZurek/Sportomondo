@@ -12,19 +12,25 @@ namespace Sportomondo.Api.Middlewares
             }
             catch (BadRequestException ex)
             {
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
                 await context.Response.WriteAsync("Error: " + ex.Message);
             }
+            catch (InvalidTokenException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+                await context.Response.WriteAsync("Error: Invalid token");
+            }
             catch (NotFoundException ex)
             {
-                context.Response.StatusCode = 404;
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
 
                 await context.Response.WriteAsync("Error: " + ex.Message);
             }         
             catch (Exception ex)
             {
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
                 await context.Response.WriteAsync("Something went wrong" + Environment.NewLine 
                     + Environment.NewLine + ex.Message);

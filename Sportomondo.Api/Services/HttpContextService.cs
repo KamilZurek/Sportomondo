@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Sportomondo.Api.Exceptions;
 using System.Security.Claims;
 
 namespace Sportomondo.Api.Services
@@ -11,12 +12,54 @@ namespace Sportomondo.Api.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User; //fix
 
-        public int UserId => User == null
-            ? 0 
-            : int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value); //fix
+        public ClaimsPrincipal User
+        {
+            get
+            {
+                var user = _httpContextAccessor.HttpContext?.User;
+                
+                if (user == null)
+                {
+                    throw new InvalidTokenException();
+                }
 
-        public string UserRoleName => User?.FindFirst(c => c.Type == ClaimTypes.Role)?.Value; //fix
+                return user;
+            }
+        }
+
+        public int UserId
+        {
+            get
+            {
+                try
+                {
+                    var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+                    return userId;
+                }
+                catch
+                {
+                    throw new InvalidTokenException();
+                }
+            }
+        }
+
+        public string UserRoleName
+        {
+            get
+            {
+                try
+                {
+                    var userRoleName = User.FindFirst(c => c.Type == ClaimTypes.Role).Value;
+
+                    return userRoleName;
+                }
+                catch
+                {
+                    throw new InvalidTokenException();
+                }
+            }
+        }
     }
 }
