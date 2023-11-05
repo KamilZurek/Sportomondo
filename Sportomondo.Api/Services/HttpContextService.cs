@@ -11,10 +11,12 @@ namespace Sportomondo.Api.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User;
+        public ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User; //fix
 
         public int UserId => User == null
             ? 0 
-            : int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            : int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value); //fix
+
+        public string UserRoleName => User?.FindFirst(c => c.Type == ClaimTypes.Role)?.Value; //fix
     }
 }

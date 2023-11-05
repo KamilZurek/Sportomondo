@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sportomondo.Api.Authorization;
 using Sportomondo.Api.Mapping;
 using Sportomondo.Api.Requests;
 using Sportomondo.Api.Responses;
@@ -43,6 +45,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = Policies.User_GetAll)]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAll()
         {
             var users = await _userService.GetAllAsync();
@@ -52,6 +55,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = Policies.User_Delete)]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             await _userService.DeleteAsync(id);

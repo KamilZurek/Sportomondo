@@ -6,5 +6,6 @@ namespace Sportomondo.Api.Services
     {
         public ClaimsPrincipal User { get; }
         public int UserId { get; }
+        public string UserRoleName { get; }
     }
 }

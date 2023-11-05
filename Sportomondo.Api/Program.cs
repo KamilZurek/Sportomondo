@@ -1,9 +1,11 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Sportomondo.Api.Authorization;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Middlewares;
 using Sportomondo.Api.Models;
@@ -45,6 +47,8 @@ namespace Sportomondo.Api
                    };
                });
 
+            builder.Services.AddAuthorizationWithPolicies();
+
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();
             builder.Services.AddScoped<IHttpContextService, HttpContextService>();
@@ -56,6 +60,8 @@ namespace Sportomondo.Api
             builder.Services.AddFluentValidationAutoValidation();
 
             builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
+
+            builder.Services.AddScoped<IAuthorizationHandler, AuthorizationRequirementHandler>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
