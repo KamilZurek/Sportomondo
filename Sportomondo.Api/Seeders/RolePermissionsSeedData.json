@@ -90,42 +90,6 @@
     "RoleName": "Member"
   },
   {
-    "Name": "User_Register",
-    "Description": "Create user",
-    "Enabled": true,
-    "RoleName": "Admin"
-  },
-  {
-    "Name": "User_Register",
-    "Description": "Create user",
-    "Enabled": true,
-    "RoleName": "Support"
-  },
-  {
-    "Name": "User_Register",
-    "Description": "Create user",
-    "Enabled": true,
-    "RoleName": "Member"
-  },
-  {
-    "Name": "User_Login",
-    "Description": "Log in user",
-    "Enabled": true,
-    "RoleName": "Admin"
-  },
-  {
-    "Name": "User_Login",
-    "Description": "Log in user",
-    "Enabled": true,
-    "RoleName": "Support"
-  },
-  {
-    "Name": "User_Login",
-    "Description": "Log in user",
-    "Enabled": true,
-    "RoleName": "Member"
-  },
-  {
     "Name": "User_ChangePassword",
     "Description": "Change user's password",
     "Enabled": true,

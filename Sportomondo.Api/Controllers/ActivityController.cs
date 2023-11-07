@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Sportomondo.Api.Authorization;
 using Sportomondo.Api.Mapping;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
@@ -19,6 +21,7 @@ namespace Sportomondo.Api.Controllers
         }
         
         [HttpGet]
+        [Authorize(Policy = Policies.ActivityGetAll)]
         public async Task<ActionResult<IEnumerable<ActivityResponse>>> GetAll()
         {
             var activities = await _service.GetAllAsync();
@@ -28,6 +31,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = Policies.ActivityGet)]
         public async Task<ActionResult<ActivityResponse>> Get([FromRoute] int id)
         {
             var activity = await _service.GetByIdAsync(id);
@@ -37,6 +41,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = Policies.ActivityCreate)]
         public async Task<ActionResult> Create([FromBody] CreateActivityRequest request)
         {
             var createdId = await _service.CreateAsync(request);
@@ -45,6 +50,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = Policies.ActivityDelete)]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             await _service.DeleteAsync(id);
@@ -53,6 +59,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = Policies.ActivityUpdate)]
         public async Task<ActionResult> Update([FromRoute] int id, [FromBody] ActivityRequest request)
         {
             await _service.UpdateAsync(id, request);

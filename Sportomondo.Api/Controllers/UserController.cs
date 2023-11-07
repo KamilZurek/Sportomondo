@@ -21,6 +21,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPost("register")]
+        //no authorization policy
         public async Task<ActionResult> Register([FromBody] RegisterUserRequest request)
         {
             await _userService.RegisterAsync(request);
@@ -29,6 +30,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPost("login")]
+        //no authorization policy
         public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request)
         {
             var token = await _userService.LoginAsync(request);
@@ -37,6 +39,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPut("changePassword")]
+        [Authorize(Policy = Policies.UserChangePassword)]
         public async Task<ActionResult> ChangePassword([FromBody] ChangeUserPasswordRequest request)
         {
             await _userService.ChangePasswordAsync(request);
@@ -45,7 +48,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = Policies.User_GetAll)]
+        [Authorize(Policy = Policies.UserGetAll)]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAll()
         {
             var users = await _userService.GetAllAsync();
@@ -55,7 +58,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = Policies.User_Delete)]
+        [Authorize(Policy = Policies.UserDelete)]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             await _userService.DeleteAsync(id);
@@ -64,6 +67,7 @@ namespace Sportomondo.Api.Controllers
         }
 
         [HttpPut("{id}/changeRole")]
+        [Authorize(Policy = Policies.UserChangeRole)]
         public async Task<ActionResult> ChangeRole([FromRoute] int id, [FromBody] string newRoleName)
         {
             await _userService.ChangeRoleAsync(id, newRoleName);
