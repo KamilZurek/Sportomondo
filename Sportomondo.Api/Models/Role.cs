@@ -12,5 +12,9 @@
         {
             return $"Id: {Id}, {Name}";
         }
+
+        public const string AdminRoleName = "Admin";
+        public const string SupportRoleName = "Support";
+        public const string MemberRoleName = "Member";
     }
 }

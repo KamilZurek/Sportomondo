@@ -29,7 +29,7 @@ namespace Sportomondo.Api.Services
                 .Include(a => a.User)
                 .ToListAsync();
 
-            if (_contextService.UserRoleName == "Member")
+            if (_contextService.UserRoleName == Role.MemberRoleName)
             {
                 activities = activities
                     .Where(a => a.UserId == _contextService.UserId)
@@ -134,20 +134,22 @@ namespace Sportomondo.Api.Services
                 throw new NotFoundException($"There is no activity with id: {id}");
             }
 
-            CheckIfRoleMemberTryToAccessItsActivity(activity);
+            CheckIfUserRoleCanAccessActivity(activity);
 
             return activity;
         }
 
-        private void CheckIfRoleMemberTryToAccessItsActivity(Activity activity)
+        private void CheckIfUserRoleCanAccessActivity(Activity activity)
         {
-            if (_contextService.UserRoleName == "Member")
+            if (_contextService.UserRoleName == Role.MemberRoleName)
             {
                 if (activity.UserId != _contextService.UserId)
                 {
                     throw new ForbiddenException();
                 }
             }
+
+            //other roles can access all activites
         }
     }
 }

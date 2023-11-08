@@ -85,17 +85,17 @@ namespace Sportomondo.Api.Seeders
             {
                 new Role()
                 {
-                    Name = "Admin",
+                    Name = Role.AdminRoleName,
                     Description = "System administrator. Can do everything."
                 },
                 new Role()
                 {
-                    Name = "Support",
+                    Name = Role.SupportRoleName,
                     Description = "Helpdesk. Can get and modify all data (without user management)."
                 },
                 new Role()
                 {
-                    Name = "Member",
+                    Name = Role.MemberRoleName,
                     Description = "Basic user. Can manage its own activities."
                 }
             };
@@ -147,11 +147,11 @@ namespace Sportomondo.Api.Seeders
         private IEnumerable<User> GetUsersToSeed()
         {
             var adminRole = _dbContext.Roles
-                .FirstOrDefault(x => x.Name == "Admin");
+                .FirstOrDefault(x => x.Name == Role.AdminRoleName);
 
             if (adminRole == null)
             {
-                throw new Exception($"Missing role 'Admin' in database - cannot seed users");
+                throw new Exception($"Missing role '{Role.AdminRoleName}' in database - cannot seed users");
             }
 
             var adminEmail = _configuration.GetValue<string>("BaseAdminEmail");

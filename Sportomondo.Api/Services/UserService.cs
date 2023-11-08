@@ -34,11 +34,11 @@ namespace Sportomondo.Api.Services
         public async Task RegisterAsync(RegisterUserRequest request)
         {
             var memberRole = _dbContext.Roles
-               .FirstOrDefault(x => x.Name == "Member");
+               .FirstOrDefault(x => x.Name == Role.MemberRoleName);
 
             if (memberRole == null)
             {
-                throw new NotFoundException("Missing role 'Member' in database - cannot register user");
+                throw new NotFoundException($"Missing role '{Role.MemberRoleName}' in database - cannot register user");
             }
 
             var user = new User()
