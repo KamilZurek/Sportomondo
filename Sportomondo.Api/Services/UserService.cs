@@ -17,16 +17,18 @@ namespace Sportomondo.Api.Services
         private readonly SportomondoDbContext _dbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextService _contextService;
 
-        public UserService(SportomondoDbContext dbContext, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
+        public UserService(SportomondoDbContext dbContext, IPasswordHasher<User> passwordHasher, IConfiguration configuration, IHttpContextService contextService)
         {
             _dbContext = dbContext;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
+            _contextService = contextService;
         }
 
         /// <summary>
-        /// Registering user with basic role - "Member"
+        /// Register user with basic role - "Member".
         /// Validation is executed by FluentValidation
         /// </summary>
         public async Task RegisterAsync(RegisterUserRequest request)
@@ -55,6 +57,10 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Sign in user with provided login and password.
+        /// If valid, returns JWT Token
+        /// </summary>
         public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request)
         {
             var user = await GetUserFromDbAsync(request.Email);
@@ -91,10 +97,13 @@ namespace Sportomondo.Api.Services
             };
         }
 
-        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request) //tests!
+        /// <summary>
+        /// Change password for current user.
+        /// </summary>
+        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request)
         {
-            //get current user
-            User user = null;
+            var user = await _dbContext.Users
+                .FirstAsync(u => u.Id == _contextService.UserId);
 
             var verifactionResultWithOldP = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
 
@@ -115,6 +124,9 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var users = await _dbContext.Users
@@ -125,6 +137,9 @@ namespace Sportomondo.Api.Services
             return users;
         }
 
+        /// <summary>
+        /// Delete user by Id. Admin-only
+        /// </summary>
         public async Task DeleteAsync(int id)
         {
             var user = await GetUserFromDbAsync(id);
@@ -133,6 +148,9 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Change user's role. Admin-only
+        /// </summary>
         public async Task ChangeRoleAsync(int userId, string newRoleName)
         {
             var user = await GetUserFromDbAsync(userId);
