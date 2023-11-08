@@ -10,13 +10,18 @@ namespace Sportomondo.Api.Services
     {
         private readonly SportomondoDbContext _dbContext;
         private readonly IManageActivityService _manageActivityService;
+        private readonly IHttpContextService _contextService;
 
-        public ActivityService(SportomondoDbContext dbContext, IManageActivityService manageActivityService)
+        public ActivityService(SportomondoDbContext dbContext, IManageActivityService manageActivityService, IHttpContextService contextService)
         {
             _dbContext = dbContext;
             _manageActivityService = manageActivityService;
+            _contextService = contextService;
         }
 
+        /// <summary>
+        /// Get all users' activities. Role "Member" can get only its data.
+        /// </summary>
         public async Task<IEnumerable<Activity>> GetAllAsync()
         {
             var activities = await _dbContext.Activities
@@ -24,9 +29,19 @@ namespace Sportomondo.Api.Services
                 .Include(a => a.User)
                 .ToListAsync();
 
+            if (_contextService.UserRoleName == "Member")
+            {
+                activities = activities
+                    .Where(a => a.UserId == _contextService.UserId)
+                    .ToList();
+            }
+            
             return activities;
         }
 
+        /// <summary>
+        /// Get activity by Id. Role "Member" can request only its data.
+        /// </summary>
         public async Task<Activity> GetByIdAsync(int id)
         {
             var activity = await GetFromDbAsync(id);
@@ -34,12 +49,15 @@ namespace Sportomondo.Api.Services
             return activity;
         }
 
+        /// <summary>
+        /// Create activity.
+        /// </summary>
         public async Task<int> CreateAsync(CreateActivityRequest request)
         {
             var user = await _dbContext.Users
-                .FirstAsync(u => u.Id == request.UserId); //tu zalogowany user
+                .FirstAsync(u => u.Id == _contextService.UserId);
             
-            var newActivity = _manageActivityService.CreateFromRequestData(request);
+            var newActivity = _manageActivityService.CreateFromRequestData(request, user.Id);
 
             _manageActivityService.CalculateTime(newActivity);
             _manageActivityService.CalculatePace(newActivity);
@@ -52,7 +70,10 @@ namespace Sportomondo.Api.Services
 
             return newActivity.Id;
         }
-        
+
+        /// <summary>
+        /// Delete activity by Id. Role "Member" can delete only its data.
+        /// </summary>
         public async Task DeleteAsync(int id)
         {
             var activity = await GetFromDbAsync(id);
@@ -61,6 +82,9 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Update activity by Id. Role "Member" can update only its data.
+        /// </summary>
         public async Task UpdateAsync(int id, ActivityRequest request)
         {
             var activity = await GetFromDbAsync(id);
@@ -110,7 +134,20 @@ namespace Sportomondo.Api.Services
                 throw new NotFoundException($"There is no activity with id: {id}");
             }
 
+            CheckIfRoleMemberTryToAccessItsActivity(activity);
+
             return activity;
+        }
+
+        private void CheckIfRoleMemberTryToAccessItsActivity(Activity activity)
+        {
+            if (_contextService.UserRoleName == "Member")
+            {
+                if (activity.UserId != _contextService.UserId)
+                {
+                    throw new ForbiddenException();
+                }
+            }
         }
     }
 }

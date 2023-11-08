@@ -22,6 +22,12 @@ namespace Sportomondo.Api.Middlewares
 
                 await context.Response.WriteAsync("Error: Invalid token");
             }
+            catch (ForbiddenException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+                await context.Response.WriteAsync("Error: Forbidden");
+            }
             catch (NotFoundException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status404NotFound;

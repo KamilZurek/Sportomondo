@@ -6,8 +6,6 @@ namespace Sportomondo.Api.Requests
     public class CreateActivityRequest : ActivityRequest //trzeba eksrea walidacje do wiekszosci pól
     { 
         [Required]
-        public ActivityType Type { get; set; }       
-        [Required]
-        public int UserId { get; set; } //wziac potem z zalogowanego usera
+        public ActivityType Type { get; set; }
     }
 }

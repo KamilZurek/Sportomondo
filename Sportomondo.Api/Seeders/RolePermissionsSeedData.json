@@ -14,7 +14,7 @@
   {
     "Name": "Activity_GetAll",
     "Description": "Get all users' activities",
-    "Enabled": false,
+    "Enabled": true,
     "RoleName": "Member"
   },
   {

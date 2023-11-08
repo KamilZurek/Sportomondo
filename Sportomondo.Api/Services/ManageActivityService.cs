@@ -18,7 +18,7 @@ namespace Sportomondo.Api.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public Activity CreateFromRequestData(CreateActivityRequest request)
+        public Activity CreateFromRequestData(CreateActivityRequest request, int userId)
         {
             return new Activity()
             {
@@ -30,7 +30,7 @@ namespace Sportomondo.Api.Services
                 AverageHr = request.AverageHr,
                 City = request.City,
                 RouteUrl = request.RouteUrl,
-                UserId = request.UserId
+                UserId = userId
             };
         }
 
