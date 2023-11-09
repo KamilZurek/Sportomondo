@@ -5,7 +5,7 @@ namespace Sportomondo.Api.Services
 {
     public interface IActivityService
     {
-        Task<IEnumerable<Activity>> GetAllAsync();
+        Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity);
         Task<int> CreateAsync(CreateActivityRequest request);
         Task<Activity> GetByIdAsync(int id);
         Task DeleteAsync(int id);

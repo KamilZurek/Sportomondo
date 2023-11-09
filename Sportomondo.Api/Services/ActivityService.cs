@@ -22,12 +22,22 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all users' activities. Role "Member" can get only its data.
         /// </summary>
-        public async Task<IEnumerable<Activity>> GetAllAsync()
+        public async Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity)
         {
             var activities = await _dbContext.Activities
                 .Include(a => a.Weather)
                 .Include(a => a.User)
                 .ToListAsync();
+
+            if (!string.IsNullOrEmpty(searchPhraseNameCity))
+            {
+                var search = searchPhraseNameCity.ToLower();
+
+                activities = activities
+                    .Where(a => a.Name.ToLower().Contains(search) 
+                        || a.City.ToLower().Contains(search))
+                    .ToList();
+            }
 
             if (_contextService.UserRoleName == Role.MemberRoleName)
             {

@@ -22,9 +22,9 @@ namespace Sportomondo.Api.Controllers
         
         [HttpGet]
         [Authorize(Policy = Policies.ActivityGetAll)]
-        public async Task<ActionResult<IEnumerable<ActivityResponse>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ActivityResponse>>> GetAll([FromQuery] string searchPhraseNameCity)
         {
-            var activities = await _service.GetAllAsync();
+            var activities = await _service.GetAllAsync(searchPhraseNameCity);
             var results = activities.Select(a => a.MapToResponse());
 
             return Ok(results);
