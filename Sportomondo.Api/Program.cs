@@ -51,17 +51,18 @@ namespace Sportomondo.Api
 
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();
-            builder.Services.AddScoped<IHttpContextService, HttpContextService>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
+            builder.Services.AddScoped<IAuthorizationHandler, AuthorizationRequirementHandler>();
+
+            builder.Services.AddScoped<IHttpContextService, HttpContextService>();
             builder.Services.AddScoped<IActivityService, ActivityService>();
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAchievementService, AchievementService>();
+
             builder.Services.AddControllers();
-            builder.Services.AddFluentValidationAutoValidation();
-
-            builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
-
-            builder.Services.AddScoped<IAuthorizationHandler, AuthorizationRequirementHandler>();
+            builder.Services.AddFluentValidationAutoValidation();    
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

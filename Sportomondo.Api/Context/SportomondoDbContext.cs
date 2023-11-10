@@ -13,6 +13,7 @@ namespace Sportomondo.Api.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,6 +69,13 @@ namespace Sportomondo.Api.Context
                 .Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+            #endregion
+
+            #region Achievement
+            modelBuilder.Entity<Achievement>()
+               .Property(r => r.Name)
+               .IsRequired()
+               .HasMaxLength(50);
             #endregion
         }
     }
