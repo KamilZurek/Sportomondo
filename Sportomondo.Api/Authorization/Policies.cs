@@ -11,5 +11,9 @@
         public const string UserGetAll = "User_GetAll";
         public const string UserDelete = "User_Delete";
         public const string UserChangeRole = "User_ChangeRole";
+        public const string AchievementGetAll = "Achievement_GetAll";
+        public const string AchievementCreate = "Achievement_Create";
+        public const string AchievementDelete = "Achievement_Delete";
+        public const string AchievementCheck = "Achievement_Check";
     }
 }

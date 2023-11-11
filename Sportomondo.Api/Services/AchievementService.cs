@@ -15,7 +15,7 @@ namespace Sportomondo.Api.Services
             _contextService = contextService;
         }
 
-        public async Task<IEnumerable<Achievement>> GetAllAsync()
+        public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine)
         {
             throw new NotImplementedException();
         }

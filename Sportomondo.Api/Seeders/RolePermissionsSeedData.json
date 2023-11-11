@@ -160,6 +160,78 @@
     "Description": "Change user's role",
     "Enabled": false,
     "RoleName": "Member"
+  },
+  {
+    "Name": "Achievement_GetAll",
+    "Description": "Get all achievements",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Achievement_GetAll",
+    "Description": "Get all achievements",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Achievement_GetAll",
+    "Description": "Get all achievements",
+    "Enabled": true,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Achievement_Create",
+    "Description": "Create achievement",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Achievement_Create",
+    "Description": "Create achievement",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Achievement_Create",
+    "Description": "Create achievement",
+    "Enabled": false,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Achievement_Delete",
+    "Description": "Delete achievement by Id",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Achievement_Delete",
+    "Description": "Delete achievement by Id",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Achievement_Delete",
+    "Description": "Delete achievement by Id",
+    "Enabled": false,
+    "RoleName": "Member"
+  },
+  {
+    "Name": "Achievement_Check",
+    "Description": "Check and assign achievements to users",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Achievement_Check",
+    "Description": "Check and assign achievements to users",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Achievement_Check",
+    "Description": "Check and assign achievements to users",
+    "Enabled": true,
+    "RoleName": "Member"
   }
 ]
 

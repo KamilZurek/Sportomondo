@@ -41,8 +41,6 @@ namespace Sportomondo.Api.Seeders
                 SeedRoles();
                 SeedRolePermissions(); //nowe akcje - nowy seed od nowa!!!!!
                 SeedUsers();
-
-                //seed others?
             }
         }
 

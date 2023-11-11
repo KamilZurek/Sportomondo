@@ -15,6 +15,10 @@
                 options.AddPolicy(Policies.UserGetAll, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.UserGetAll)));
                 options.AddPolicy(Policies.UserDelete, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.UserDelete)));
                 options.AddPolicy(Policies.UserChangeRole, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.UserChangeRole)));
+                options.AddPolicy(Policies.AchievementGetAll, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementGetAll)));
+                options.AddPolicy(Policies.AchievementCreate, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementCreate)));
+                options.AddPolicy(Policies.AchievementDelete, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementDelete)));
+                options.AddPolicy(Policies.AchievementCheck, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementCheck)));
             });
         }
     }
