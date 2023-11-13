@@ -14,6 +14,7 @@ namespace Sportomondo.Api.Models
         public int RoleId { get; set; }
         public Role Role { get; set; }
         public ICollection<Activity> Activities { get; set; }
+        public ICollection<Achievement> Achievements { get; set; }
 
         public override string ToString()
         {

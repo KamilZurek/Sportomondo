@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sportomondo.Api.Authorization;
+using Sportomondo.Api.Mapping;
 using Sportomondo.Api.Requests;
 using Sportomondo.Api.Responses;
 using Sportomondo.Api.Services;
@@ -24,7 +25,7 @@ namespace Sportomondo.Api.Controllers
         public async Task<ActionResult<IEnumerable<AchievementResponse>>> GetAll([FromQuery] bool onlyMine)
         {
             var achievements = await _service.GetAllAsync(onlyMine);
-            var results = achievements.Select(a => a.MapToResponse());
+            var results = achievements.Select(a => a.MapToResponse()); //zmiana!!!!
 
             return Ok(results);
         }

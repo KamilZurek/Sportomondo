@@ -39,5 +39,13 @@ namespace Sportomondo.Api.Mapping
                 ActivitiesCount = user.Activities.Count
             };
         }
+
+        public static AchievementResponse MapToResponse(this Achievement achievement)
+        {
+            return new AchievementResponse()
+            {
+
+            };
+        }
     }
 }

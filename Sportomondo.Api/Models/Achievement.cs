@@ -8,8 +8,7 @@
         public CountingType CountingType { get; set; }
         public decimal CountingRequiredValue { get; set; }
         public int Points { get; set; }
-
-        //i cos dla tabel
+        public ICollection<User> Users { get; set; }
 
         public override string ToString()
         {
