@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
 
@@ -54,7 +55,16 @@ namespace Sportomondo.Api.Services
 
         public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var achievement = await _dbContext.Achievements
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (achievement == null)
+            {
+                throw new NotFoundException($"There is no achievement with id: {id}");
+            }
+
+            _dbContext.Achievements.Remove(achievement);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<string> CheckAsync()
