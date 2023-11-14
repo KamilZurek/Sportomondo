@@ -25,7 +25,7 @@ namespace Sportomondo.Api.Controllers
         public async Task<ActionResult<IEnumerable<AchievementResponse>>> GetAll([FromQuery] bool onlyMine)
         {
             var achievements = await _service.GetAllAsync(onlyMine);
-            var results = achievements.Select(a => a.MapToResponse()); //zmiana!!!!
+            var results = achievements.Select(a => a.MapToResponse());
 
             return Ok(results);
         }

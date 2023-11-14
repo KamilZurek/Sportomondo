@@ -44,7 +44,13 @@ namespace Sportomondo.Api.Mapping
         {
             return new AchievementResponse()
             {
-
+                Id = achievement.Id,
+                Name = achievement.Name,
+                ActivityType = achievement.ActivityType.ToString(),
+                CountingType = achievement.CountingType.ToString(),
+                CountingRequiredValue = achievement.CountingRequiredValue,
+                Points = achievement.Points,
+                WhoHas = achievement.Users.Select(x => x.FirstName + " " + x.LastName).ToList()
             };
         }
     }
