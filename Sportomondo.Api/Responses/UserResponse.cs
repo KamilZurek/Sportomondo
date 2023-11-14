@@ -8,5 +8,6 @@
         public decimal Weight { get; set; }
         public string Role { get; set; }
         public int ActivitiesCount { get; set; }
+        public int AchievementsPoints { get; set; }
     }
 }

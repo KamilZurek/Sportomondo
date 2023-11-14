@@ -130,8 +130,9 @@ namespace Sportomondo.Api.Services
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var users = await _dbContext.Users
-                .Include(x => x.Role)
+                .Include(u => u.Role)
                 .Include(u => u.Activities)
+                .Include(u => u.Achievements)
                 .ToListAsync();
 
             return users;

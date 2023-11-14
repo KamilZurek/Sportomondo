@@ -36,7 +36,8 @@ namespace Sportomondo.Api.Mapping
                 DateOfBirth = user.DateOfBirth,
                 Weight = user.Weight,
                 Role = user.Role.Name,
-                ActivitiesCount = user.Activities.Count
+                ActivitiesCount = user.Activities.Count,
+                AchievementsPoints = user.Achievements.Sum(x => x.Points)
             };
         }
 
