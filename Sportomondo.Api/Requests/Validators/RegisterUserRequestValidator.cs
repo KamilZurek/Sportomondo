@@ -22,10 +22,12 @@ namespace Sportomondo.Api.Requests.Validators
                     });
 
             RuleFor(x => x.FirstName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(50);
 
             RuleFor(x => x.LastName)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(50);
 
             RuleFor(x => x.DateOfBirth)
                 .NotEmpty()

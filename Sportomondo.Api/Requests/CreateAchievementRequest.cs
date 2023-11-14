@@ -9,9 +9,10 @@ namespace Sportomondo.Api.Requests
         [MaxLength(50)]
         public string Name { get; set; }
         [Required]
-        //[Range()] ???????????????????? i reszta?
+        [Range(0,2)]
         public ActivityType ActivityType { get; set; }
         [Required]
+        [Range(0, 1)]
         public CountingType CountingType { get; set; }
         [Required]
         public decimal CountingRequiredValue { get; set; }

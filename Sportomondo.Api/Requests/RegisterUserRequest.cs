@@ -2,7 +2,7 @@
 
 namespace Sportomondo.Api.Requests
 {
-    public class RegisterUserRequest
+    public class RegisterUserRequest //validation in RegisterUserRequestValidator
     {
         public string Email { get; set; }
         public string FirstName { get; set; }

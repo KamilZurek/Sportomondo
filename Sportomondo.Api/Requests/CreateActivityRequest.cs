@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sportomondo.Api.Requests
 {
-    public class CreateActivityRequest : ActivityRequest //trzeba eksrea walidacje do wiekszosci pól
+    public class CreateActivityRequest : ActivityRequest
     { 
         [Required]
+        [Range(0, 2)]
         public ActivityType Type { get; set; }
     }
 }
