@@ -232,6 +232,24 @@
     "Description": "Check and assign achievements to users",
     "Enabled": true,
     "RoleName": "Member"
+  },
+  {
+    "Name": "Summary_Get",
+    "Description": "Get summaries for current user",
+    "Enabled": true,
+    "RoleName": "Admin"
+  },
+  {
+    "Name": "Summary_Get",
+    "Description": "Get summaries for current user",
+    "Enabled": true,
+    "RoleName": "Support"
+  },
+  {
+    "Name": "Summary_Get",
+    "Description": "Get summaries for current user",
+    "Enabled": true,
+    "RoleName": "Member"
   }
 ]
 

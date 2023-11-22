@@ -60,6 +60,7 @@ namespace Sportomondo.Api
             builder.Services.AddScoped<IManageActivityService, ManageActivityService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAchievementService, AchievementService>();
+            builder.Services.AddScoped<ISummaryService, SummaryService>();
 
             builder.Services.AddControllers();
             builder.Services.AddFluentValidationAutoValidation();    

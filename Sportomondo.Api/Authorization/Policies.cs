@@ -15,5 +15,6 @@
         public const string AchievementCreate = "Achievement_Create";
         public const string AchievementDelete = "Achievement_Delete";
         public const string AchievementCheck = "Achievement_Check";
+        public const string SummaryGet = "Summary_Get";
     }
 }

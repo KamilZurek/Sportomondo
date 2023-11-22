@@ -19,6 +19,7 @@
                 options.AddPolicy(Policies.AchievementCreate, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementCreate)));
                 options.AddPolicy(Policies.AchievementDelete, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementDelete)));
                 options.AddPolicy(Policies.AchievementCheck, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.AchievementCheck)));
+                options.AddPolicy(Policies.SummaryGet, builder => builder.AddRequirements(new AuthorizationRequirement(Policies.SummaryGet)));           
             });
         }
     }
