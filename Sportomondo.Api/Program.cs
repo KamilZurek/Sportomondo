@@ -73,8 +73,19 @@ namespace Sportomondo.Api
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins", policyBuilder =>
+                {
+                    policyBuilder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin();
+                });
+            });
 
             var app = builder.Build();
+
+            app.UseCors("AllowAllOrigins");
 
             var scope = app.Services.CreateScope();
             var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
