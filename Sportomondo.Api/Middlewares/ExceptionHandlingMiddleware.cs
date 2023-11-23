@@ -4,6 +4,13 @@ namespace Sportomondo.Api.Middlewares
 {
     public class ExceptionHandlingMiddleware : IMiddleware
     {
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+        public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -12,34 +19,54 @@ namespace Sportomondo.Api.Middlewares
             }
             catch (BadRequestException ex)
             {
+                var exceptionMessage = "Error: " + ex.Message;
+
+                _logger.LogError(exceptionMessage);
+
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-                await context.Response.WriteAsync("Error: " + ex.Message);
+                await context.Response.WriteAsync(exceptionMessage);
             }
             catch (InvalidTokenException ex)
             {
+                var exceptionMessage = "Error: Invalid token";
+
+                _logger.LogError(exceptionMessage);
+
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
-                await context.Response.WriteAsync("Error: Invalid token");
+                await context.Response.WriteAsync(exceptionMessage);
             }
             catch (ForbiddenException ex)
             {
+                var exceptionMessage = "Error: Forbidden";
+
+                _logger.LogError(exceptionMessage);
+
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
 
-                await context.Response.WriteAsync("Error: Forbidden");
+                await context.Response.WriteAsync(exceptionMessage);
             }
             catch (NotFoundException ex)
             {
+                var exceptionMessage = "Error: " + ex.Message;
+
+                _logger.LogError(exceptionMessage);
+
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
 
-                await context.Response.WriteAsync("Error: " + ex.Message);
+                await context.Response.WriteAsync(exceptionMessage);
             }         
             catch (Exception ex)
             {
+                var exceptionMessage = "Something went wrong" + Environment.NewLine
+                    + Environment.NewLine + ex.Message;
+
+                _logger.LogError(exceptionMessage);
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-                await context.Response.WriteAsync("Something went wrong" + Environment.NewLine 
-                    + Environment.NewLine + ex.Message);
+                await context.Response.WriteAsync(exceptionMessage);
             }
         }
     }

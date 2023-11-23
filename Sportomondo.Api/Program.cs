@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Web;
 using Sportomondo.Api.Authorization;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Middlewares;
@@ -23,6 +24,11 @@ namespace Sportomondo.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // NLog: Setup NLog for Dependency injection
+            builder.Logging.ClearProviders();
+            builder.Logging.SetMinimumLevel(LogLevel.Trace);
+            builder.Host.UseNLog();
 
             // Add services to the container.
             builder.Services.AddHttpClient();
