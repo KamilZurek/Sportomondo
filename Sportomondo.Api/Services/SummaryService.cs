@@ -21,6 +21,9 @@ namespace Sportomondo.Api.Services
             _contextService = contextService;
         }
 
+        /// <summary>
+        /// Get summary for current user
+        /// </summary>
         public async Task<SummaryResponse> GetAsync()
         {
             var user = await GetUserAsync();

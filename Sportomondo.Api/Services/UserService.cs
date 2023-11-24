@@ -98,7 +98,7 @@ namespace Sportomondo.Api.Services
         }
 
         /// <summary>
-        /// Change password for current user.
+        /// Change password for current user
         /// </summary>
         public async Task ChangePasswordAsync(ChangeUserPasswordRequest request)
         {

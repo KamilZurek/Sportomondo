@@ -17,6 +17,9 @@ namespace Sportomondo.Api.Services
             _contextService = contextService;
         }
 
+        /// <summary>
+        /// Get all achievements
+        /// </summary>
         public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine)
         {
             var achievements = await _dbContext.Achievements
@@ -36,6 +39,9 @@ namespace Sportomondo.Api.Services
             return achievements;
         }
 
+        /// <summary>
+        /// Create achievement
+        /// </summary>
         public async Task<int> CreateAsync(CreateAchievementRequest request)
         {
             var achievement = new Achievement()
@@ -53,6 +59,9 @@ namespace Sportomondo.Api.Services
             return achievement.Id;
         }
 
+        /// <summary>
+        /// Delete achievement by Id
+        /// </summary>
         public async Task DeleteAsync(int id)
         {
             var achievement = await _dbContext.Achievements
@@ -67,6 +76,9 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Check and assign achievements to users
+        /// </summary>
         public async Task<string> CheckAsync()
         {
             var achievementsInfo = string.Empty;
