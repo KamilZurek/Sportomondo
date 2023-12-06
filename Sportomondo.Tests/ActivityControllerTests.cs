@@ -43,8 +43,10 @@ namespace Sportomondo.Tests
             #endregion
         }
 
-        [Fact]
-        public async Task GetAll_WithEmptyQueryParameter_ReturnsOkResult()
+        [Theory]
+        [InlineData(null, 2)]
+        [InlineData("?searchPhraseNameCity=Warsaw", 1)]
+        public async Task GetAll_WithValidQueryParameter_ReturnsOkResult(string queryParameter, int expectedActivities)
         {
             // arrange
 
@@ -52,31 +54,13 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.GetAsync("api/activities");
+            var response = await _client.GetAsync($"api/activities{queryParameter}");
             var responseActivitiesDto = await response.Content.ReadFromJsonAsync<IEnumerable<ActivityResponse>>();
 
             // assert
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            responseActivitiesDto.Should().HaveCount(2);
-        }
-
-        [Fact]
-        public async Task GetAll_WithQueryParameterCity_ReturnsOkResult()
-        {
-            // arrange
-
-            await PrepareActivitiesInDatabase();
-
-            // act
-
-            var response = await _client.GetAsync("api/activities?searchPhraseNameCity=Warsaw");
-            var responseActivitiesDto = await response.Content.ReadFromJsonAsync<IEnumerable<ActivityResponse>>();
-
-            // assert
-
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            responseActivitiesDto.Should().HaveCount(1);
+            responseActivitiesDto.Should().HaveCount(expectedActivities);
         }
 
         private async Task PrepareActivitiesInDatabase()
