@@ -25,12 +25,15 @@ namespace Sportomondo.Api.Seeders
         {
             if (_dbContext.Database.CanConnect())
             {
-                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
-
-                if (pendingMigrations != null && pendingMigrations.Any())
+                if (_dbContext.Database.IsRelational())
                 {
-                    _dbContext.Database.Migrate();
-                }
+                    var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+
+                    if (pendingMigrations != null && pendingMigrations.Any())
+                    {
+                        _dbContext.Database.Migrate();
+                    }
+                }  
             }
         }
 
