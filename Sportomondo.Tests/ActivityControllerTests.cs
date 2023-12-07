@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Sportomondo.Api;
 using Sportomondo.Api.Context;
+using Sportomondo.Api.Models;
+using Sportomondo.Api.Requests;
 using Sportomondo.Api.Responses;
 using Sportomondo.Tests.Helpers;
 using System.Net;
@@ -17,7 +19,7 @@ namespace Sportomondo.Tests
             _factory = factory;
             _client = factory.CreateClient();
 
-            #region OldFactoryNotWorking
+            #region OldFactoryNotSureIfWorking
             //_factory = factory.WithWebHostBuilder(builder => //2 razy wchodzi?
             //{
             //    builder.ConfigureServices(services =>
@@ -61,6 +63,58 @@ namespace Sportomondo.Tests
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             responseActivitiesDto.Should().HaveCount(expectedActivities);
+        }
+
+        [Fact]
+        public async Task Create_WithValidModel_ReturnsCreatedResult()
+        {
+            // arrange
+
+            var dto = new CreateActivityRequest()
+            {
+                Name = "Running Test",
+                DateStart = DateTime.Now,
+                DateFinish = DateTime.Now.AddHours(1),
+                Distance = 10,
+                AverageHr = 169,
+                City = "Cracow",
+                RouteUrl = null,
+                Type = ActivityType.Running
+            };
+
+            // act
+
+            var response = await _client.PostAsJsonAsync($"api/activities", dto);
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+
+        [Fact]
+        public async Task Create_WithInvalidModel_ReturnsBadRequestResult()
+        {
+            // arrange
+
+            var dto = new CreateActivityRequest()
+            {
+                Name = "Test Running Invalid",
+                DateStart = DateTime.Now,
+                DateFinish = DateTime.Now.AddHours(-1), //wrong
+                Distance = 10,
+                AverageHr = 169,
+                City = "WrongCityName", //wrong
+                RouteUrl = null,
+                Type = ActivityType.Running
+            };
+
+            // act
+
+            var response = await _client.PostAsJsonAsync($"api/activities", dto);
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         private async Task PrepareActivitiesInDatabase()
