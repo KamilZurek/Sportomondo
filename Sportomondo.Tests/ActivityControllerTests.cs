@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Sportomondo.Api;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Models;
@@ -63,6 +64,52 @@ namespace Sportomondo.Tests
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             responseActivitiesDto.Should().HaveCount(expectedActivities);
+        }
+
+        [Fact]
+        public async Task Get_WithValidRouteParameter_ReturnsOkResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+
+            int id;
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities.FirstAsync();
+                
+                id = activity.Id;
+            }
+
+            // act
+
+            var response = await _client.GetAsync($"api/activities/{id}");
+            var responseActivityDto = await response.Content.ReadFromJsonAsync<ActivityResponse>();
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            responseActivityDto.Should().NotBeNull();
+            responseActivityDto?.Id.Should().Be(id);
+        }
+
+        [Fact]
+        public async Task Get_WithInvalidRouteParameter_ReturnsNotFoundResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+            
+            int nonExistentId = 0; //min Id is 1
+
+            // act
+
+            var response = await _client.GetAsync($"api/activities/{nonExistentId}");
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
