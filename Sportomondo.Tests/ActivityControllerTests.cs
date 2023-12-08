@@ -164,6 +164,62 @@ namespace Sportomondo.Tests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
+        [Fact]
+        public async Task Delete_WithValidRouteParameter_ReturnsNoContentResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+
+            int id;
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities.FirstAsync();
+
+                id = activity.Id;
+            }
+
+            // act
+
+            var response = await _client.DeleteAsync($"api/activities/{id}");
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities
+                    .FirstOrDefaultAsync(a => a.Id == id);
+
+                activity.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public async Task Delete_WithInvalidRouteParameter_ReturnsNotFoundResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+
+            int nonExistentId = 0; //min Id is 1
+
+            // act
+
+            var response = await _client.DeleteAsync($"api/activities/{nonExistentId}");
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        //update_ok
+
+        //update_fail
+
         private async Task PrepareActivitiesInDatabase()
         {
             using var scope = _factory.Services.CreateScope();
