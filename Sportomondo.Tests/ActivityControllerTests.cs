@@ -19,31 +19,6 @@ namespace Sportomondo.Tests
         {
             _factory = factory;
             _client = factory.CreateClient();
-
-            #region OldFactoryNotSureIfWorking
-            //_factory = factory.WithWebHostBuilder(builder => //2 razy wchodzi?
-            //{
-            //    builder.ConfigureServices(services =>
-            //    {
-            //        var dbContextOptions = services
-            //                .SingleOrDefault(service => service.ServiceType == typeof(DbContextOptions<SportomondoDbContext>));
-
-            //        services.Remove(dbContextOptions);
-
-            //        services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
-
-            //        services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
-
-            //        services
-            //             .AddDbContext<SportomondoDbContext>(options => options.UseInMemoryDatabase("SportomondoDbTest"));
-
-            //    });
-            //});
-
-            //_client = factory.CreateClient(); //brak "_"
-
-            //https://github.com/dotnet/AspNetCore.Docs.Samples/tree/main/test/integration-tests/IntegrationTestsSample
-            #endregion
         }
 
         [Theory]
@@ -58,7 +33,8 @@ namespace Sportomondo.Tests
             // act
 
             var response = await _client.GetAsync($"api/activities{queryParameter}");
-            var responseActivitiesDto = await response.Content.ReadFromJsonAsync<IEnumerable<ActivityResponse>>();
+            var responseActivitiesDto = await response.Content
+                .ReadFromJsonAsync<IEnumerable<ActivityResponse>>();
 
             // assert
 
@@ -74,10 +50,12 @@ namespace Sportomondo.Tests
             await PrepareActivitiesInDatabase();
 
             int id;
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
-                var activity = await dbContext.Activities.FirstAsync();
+                var activity = await dbContext.Activities
+                    .FirstAsync();
                 
                 id = activity.Id;
             }
@@ -85,7 +63,8 @@ namespace Sportomondo.Tests
             // act
 
             var response = await _client.GetAsync($"api/activities/{id}");
-            var responseActivityDto = await response.Content.ReadFromJsonAsync<ActivityResponse>();
+            var responseActivityDto = await response.Content
+                .ReadFromJsonAsync<ActivityResponse>();
 
             // assert
 
@@ -172,10 +151,12 @@ namespace Sportomondo.Tests
             await PrepareActivitiesInDatabase();
 
             int id;
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
-                var activity = await dbContext.Activities.FirstAsync();
+                var activity = await dbContext.Activities
+                    .FirstAsync();
 
                 id = activity.Id;
             }
@@ -216,9 +197,125 @@ namespace Sportomondo.Tests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        //update_ok
+        [Fact]
+        public async Task Update_WithValidModelAndRouteParameter_ReturnsOkResult()
+        {
+            // arrange
 
-        //update_fail
+            await PrepareActivitiesInDatabase();
+
+            int id, previousWeatherId;
+            string previousActivityName;
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities
+                    .Include(a => a.Weather)
+                    .FirstAsync();
+
+                id = activity.Id;
+                previousActivityName = activity.Name;
+                previousWeatherId = activity.Weather.Id;
+            }
+
+            var dto = new ActivityRequest()
+            {
+                Name = "Test Running After Update",
+                DateStart = DateTime.Now,
+                DateFinish = DateTime.Now.AddHours(1),
+                Distance = 10,
+                AverageHr = 169,
+                City = "Berlin",
+                RouteUrl = null,
+            };
+
+            // act
+
+            var response = await _client.PutAsJsonAsync($"api/activities/{id}", dto);
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities
+                    .Include(a => a.Weather)
+                    .FirstAsync(a => a.Id == id);
+
+                activity.Name.Should().NotBe(previousActivityName);
+                activity.Weather.Id.Should().NotBe(previousWeatherId);
+            }
+        }
+
+        [Fact]
+        public async Task Update_WithInvalidRouteParameter_ReturnsNotFoundResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+
+            int nonExistentId = 0; //min Id is 1
+
+            var dto = new ActivityRequest()
+            {
+                Name = "Test Running After Update",
+                DateStart = DateTime.Now,
+                DateFinish = DateTime.Now.AddHours(1),
+                Distance = 10,
+                AverageHr = 169,
+                City = "Berlin",
+                RouteUrl = null,
+            };
+
+            // act
+
+            var response = await _client.PutAsJsonAsync($"api/activities/{nonExistentId}", dto);
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Update_WithInvalidModel_ReturnsBadRequestResult()
+        {
+            // arrange
+
+            await PrepareActivitiesInDatabase();
+
+            int id;
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SportomondoDbContext>();
+                var activity = await dbContext.Activities
+                    .FirstAsync();
+
+                id = activity.Id;
+            }
+
+            var dto = new ActivityRequest()
+            {
+                Name = "Test Running After Update Invalid",
+                DateStart = DateTime.Now,
+                DateFinish = DateTime.Now.AddHours(-1), //wrong
+                Distance = 10,
+                AverageHr = 169,
+                City = "WrongCityName", //wrong
+                RouteUrl = null,
+            };
+
+            // act
+
+            var response = await _client.PutAsJsonAsync($"api/activities/{id}", dto);
+
+            // assert
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
 
         private async Task PrepareActivitiesInDatabase()
         {
@@ -268,5 +365,30 @@ namespace Sportomondo.Tests
 
         //_client.DefaultRequestHeaders.Add("Authorization", $"Bearer {responseContent.Token}");
         #endregion
+
+        #region factoryFromConstructorNotSureIfWorkingOld
+        //_factory = factory.WithWebHostBuilder(builder => //2 razy wchodzi?
+        //{
+        //    builder.ConfigureServices(services =>
+        //    {
+        //        var dbContextOptions = services
+        //                .SingleOrDefault(service => service.ServiceType == typeof(DbContextOptions<SportomondoDbContext>));
+
+        //        services.Remove(dbContextOptions);
+
+        //        services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+
+        //        services.AddMvc(option => option.Filters.Add(new FakeUserFilter()));
+
+        //        services
+        //             .AddDbContext<SportomondoDbContext>(options => options.UseInMemoryDatabase("SportomondoDbTest"));
+
+        //    });
+        //});
+
+        //_client = factory.CreateClient(); //brak "_"
+        #endregion
+
+        //https://github.com/dotnet/AspNetCore.Docs.Samples/tree/main/test/integration-tests/IntegrationTestsSample
     }
 }
