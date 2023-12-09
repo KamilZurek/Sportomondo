@@ -14,6 +14,7 @@ namespace Sportomondo.Tests
     {
         private readonly CustomWebApplicationFactory<Program> _factory;
         private readonly HttpClient _client;
+        private const string baseUri = "api/activities";
 
         public ActivityControllerTests(CustomWebApplicationFactory<Program> factory)
         {
@@ -32,7 +33,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.GetAsync($"api/activities{queryParameter}");
+            var response = await _client.GetAsync($"{baseUri}{queryParameter}");
             var responseActivitiesDto = await response.Content
                 .ReadFromJsonAsync<IEnumerable<ActivityResponse>>();
 
@@ -62,7 +63,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.GetAsync($"api/activities/{id}");
+            var response = await _client.GetAsync($"{baseUri}/{id}");
             var responseActivityDto = await response.Content
                 .ReadFromJsonAsync<ActivityResponse>();
 
@@ -84,7 +85,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.GetAsync($"api/activities/{nonExistentId}");
+            var response = await _client.GetAsync($"{baseUri}/{nonExistentId}");
 
             // assert
 
@@ -110,7 +111,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.PostAsJsonAsync($"api/activities", dto);
+            var response = await _client.PostAsJsonAsync($"{baseUri}", dto);
 
             // assert
 
@@ -136,7 +137,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.PostAsJsonAsync($"api/activities", dto);
+            var response = await _client.PostAsJsonAsync($"{baseUri}", dto);
 
             // assert
 
@@ -163,7 +164,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.DeleteAsync($"api/activities/{id}");
+            var response = await _client.DeleteAsync($"{baseUri}/{id}");
 
             // assert
 
@@ -190,7 +191,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.DeleteAsync($"api/activities/{nonExistentId}");
+            var response = await _client.DeleteAsync($"{baseUri}/{nonExistentId}");
 
             // assert
 
@@ -232,7 +233,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.PutAsJsonAsync($"api/activities/{id}", dto);
+            var response = await _client.PutAsJsonAsync($"{baseUri}/{id}", dto);
 
             // assert
 
@@ -272,7 +273,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.PutAsJsonAsync($"api/activities/{nonExistentId}", dto);
+            var response = await _client.PutAsJsonAsync($"{baseUri}/{nonExistentId}", dto);
 
             // assert
 
@@ -310,7 +311,7 @@ namespace Sportomondo.Tests
 
             // act
 
-            var response = await _client.PutAsJsonAsync($"api/activities/{id}", dto);
+            var response = await _client.PutAsJsonAsync($"{baseUri}/{id}", dto);
 
             // assert
 
@@ -367,7 +368,7 @@ namespace Sportomondo.Tests
         #endregion
 
         #region factoryFromConstructorNotSureIfWorkingOld
-        //_factory = factory.WithWebHostBuilder(builder => //2 razy wchodzi?
+        //_factory = factory.WithWebHostBuilder(builder => //2 razy wchodzi? chyba juz nie
         //{
         //    builder.ConfigureServices(services =>
         //    {
