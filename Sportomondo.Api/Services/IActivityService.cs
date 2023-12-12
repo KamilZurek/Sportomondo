@@ -5,10 +5,10 @@ namespace Sportomondo.Api.Services
 {
     public interface IActivityService
     {
-        Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity);
-        Task<int> CreateAsync(CreateActivityRequest request);
-        Task<Activity> GetByIdAsync(int id);
-        Task DeleteAsync(int id);
-        Task UpdateAsync(int id, ActivityRequest request);
+        Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity, CancellationToken cancellationToken);
+        Task<int> CreateAsync(CreateActivityRequest request, CancellationToken cancellationToken);
+        Task<Activity> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
+        Task UpdateAsync(int id, ActivityRequest request, CancellationToken cancellationToken);
     }
 }

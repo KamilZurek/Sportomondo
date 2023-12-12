@@ -9,6 +9,6 @@ namespace Sportomondo.Api.Services
         void CalculateTime(Activity activity);
         void CalculatePace(Activity activity);
         void CalculateCalories(Activity activity, User user);
-        Task<Weather> GetWeatherFromAPIAsync(Activity activity);
+        Task<Weather> GetWeatherFromAPIAsync(Activity activity, CancellationToken cancellationToken);
     }
 }

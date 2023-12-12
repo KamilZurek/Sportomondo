@@ -20,9 +20,9 @@ namespace Sportomondo.Api.Controllers
 
         [HttpGet]
         [Authorize(Policy = Policies.SummaryGet)]
-        public async Task<ActionResult<SummaryResponse>> Get()
+        public async Task<ActionResult<SummaryResponse>> Get(CancellationToken cancellationToken)
         {
-            var summary = await _service.GetAsync();
+            var summary = await _service.GetAsync(cancellationToken);
 
             return summary;
         }

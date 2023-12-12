@@ -5,9 +5,9 @@ namespace Sportomondo.Api.Services
 {
     public interface IAchievementService
     {
-        Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine);
-        Task<int> CreateAsync(CreateAchievementRequest request);
-        Task DeleteAsync(int id);
-        Task<string> CheckAsync();
+        Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine, CancellationToken cancellationToken);
+        Task<int> CreateAsync(CreateAchievementRequest request, CancellationToken cancellationToken);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
+        Task<string> CheckAsync(CancellationToken cancellationToken);
     }
 }

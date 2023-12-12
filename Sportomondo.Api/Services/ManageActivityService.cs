@@ -65,20 +65,20 @@ namespace Sportomondo.Api.Services
             activity.KcalBurned = user.Weight * (decimal)activity.Time.TotalHours * activity.AverageHr / 20;
         }
 
-        public async Task<Weather> GetWeatherFromAPIAsync(Activity activity)
+        public async Task<Weather> GetWeatherFromAPIAsync(Activity activity, CancellationToken cancellationToken)
         {
             var baseUri = GetApiBaseUri();
-            var queryParams = await GetQueryParameters(activity);
+            var queryParams = await GetQueryParameters(activity, cancellationToken);
             var completeUri = $"{baseUri}?{queryParams}";
 
             var httpClient = _httpClientFactory.CreateClient();
             var httpRequestMessage = GetHttpRequestMessage(completeUri);
 
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                var json = await httpResponseMessage.Content.ReadAsStringAsync();
+                var json = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
 
                 using (var doc = JsonDocument.Parse(json))
                 {
@@ -98,7 +98,7 @@ namespace Sportomondo.Api.Services
             }
         }
 
-        private async Task<string> GetQueryParameters(Activity activity)
+        private async Task<string> GetQueryParameters(Activity activity, CancellationToken cancellationToken)
         {
             var apiKey = GetApiKey();
 
@@ -110,7 +110,7 @@ namespace Sportomondo.Api.Services
             };
 
             var dictFormUrlEncoded = new FormUrlEncodedContent(paramsDict);
-            var paramsResult = await dictFormUrlEncoded.ReadAsStringAsync();
+            var paramsResult = await dictFormUrlEncoded.ReadAsStringAsync(cancellationToken);
 
             return paramsResult;
         }

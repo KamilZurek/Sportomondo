@@ -31,10 +31,10 @@ namespace Sportomondo.Api.Services
         /// Register user with basic role - "Member".
         /// Validation is executed by FluentValidation
         /// </summary>
-        public async Task RegisterAsync(RegisterUserRequest request)
+        public async Task RegisterAsync(RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            var memberRole = _dbContext.Roles
-               .FirstOrDefault(x => x.Name == Role.MemberRoleName);
+            var memberRole = await _dbContext.Roles
+               .FirstOrDefaultAsync(x => x.Name == Role.MemberRoleName, cancellationToken);
 
             if (memberRole == null)
             {
@@ -54,16 +54,16 @@ namespace Sportomondo.Api.Services
             user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
 
             _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Sign in user with provided login and password.
         /// If valid, returns JWT Token
         /// </summary>
-        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request)
+        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request, CancellationToken cancellationToken)
         {
-            var user = await GetUserFromDbAsync(request.Email);
+            var user = await GetUserFromDbAsync(request.Email, cancellationToken);
 
             var passwordVerifactionResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
@@ -100,10 +100,10 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Change password for current user
         /// </summary>
-        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request)
+        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
-                .FirstAsync(u => u.Id == _contextService.UserId);
+                .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
 
             var verifactionResultWithOldP = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
 
@@ -121,19 +121,19 @@ namespace Sportomondo.Api.Services
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Get all users
         /// </summary>
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
         {
             var users = await _dbContext.Users
                 .Include(u => u.Role)
                 .Include(u => u.Activities)
                 .Include(u => u.Achievements)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return users;
         }
@@ -141,34 +141,34 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete user by Id. Admin-only
         /// </summary>
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var user = await GetUserFromDbAsync(id);
+            var user = await GetUserFromDbAsync(id, cancellationToken);
 
             _dbContext.Users.Remove(user);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Change user's role. Admin-only
         /// </summary>
-        public async Task ChangeRoleAsync(int userId, string newRoleName)
+        public async Task ChangeRoleAsync(int userId, string newRoleName, CancellationToken cancellationToken)
         {
-            var user = await GetUserFromDbAsync(userId);
+            var user = await GetUserFromDbAsync(userId, cancellationToken);
 
-            var newRole = await GetRoleFromDbAsync(newRoleName);
+            var newRole = await GetRoleFromDbAsync(newRoleName, cancellationToken);
 
             user.RoleId = newRole.Id;
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<User> GetUserFromDbAsync(int id)
+        private async Task<User> GetUserFromDbAsync(int id, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Role)
                 .Include(u => u.Activities)
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
             if (user == null)
             {
@@ -178,12 +178,12 @@ namespace Sportomondo.Api.Services
             return user;
         }
 
-        private async Task<User> GetUserFromDbAsync(string email)
+        private async Task<User> GetUserFromDbAsync(string email, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Role)
                 .Include(u => u.Activities)
-                .FirstOrDefaultAsync(u => u.Email == email);
+                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
             if (user == null)
             {
@@ -193,10 +193,10 @@ namespace Sportomondo.Api.Services
             return user;
         }
 
-        private async Task<Role> GetRoleFromDbAsync(string roleName)
+        private async Task<Role> GetRoleFromDbAsync(string roleName, CancellationToken cancellationToken)
         {
             var role = await _dbContext.Roles
-                    .FirstOrDefaultAsync(x => x.Name == roleName);
+                    .FirstOrDefaultAsync(x => x.Name == roleName, cancellationToken);
 
             if (role == null)
             {

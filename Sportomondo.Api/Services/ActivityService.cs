@@ -3,6 +3,7 @@ using Sportomondo.Api.Context;
 using Sportomondo.Api.Exceptions;
 using Sportomondo.Api.Models;
 using Sportomondo.Api.Requests;
+using System.Threading;
 
 namespace Sportomondo.Api.Services
 {
@@ -22,12 +23,12 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all users' activities. Role "Member" can get only its data.
         /// </summary>
-        public async Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity)
+        public async Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity, CancellationToken cancellationToken)
         {
             var activities = await _dbContext.Activities
                 .Include(a => a.Weather)
                 .Include(a => a.User)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (!string.IsNullOrEmpty(searchPhraseNameCity))
             {
@@ -52,9 +53,9 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get activity by Id. Role "Member" can request only its data.
         /// </summary>
-        public async Task<Activity> GetByIdAsync(int id)
+        public async Task<Activity> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var activity = await GetFromDbAsync(id);
+            var activity = await GetFromDbAsync(id, cancellationToken);
 
             return activity;
         }
@@ -62,10 +63,10 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Create activity.
         /// </summary>
-        public async Task<int> CreateAsync(CreateActivityRequest request)
+        public async Task<int> CreateAsync(CreateActivityRequest request, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
-                .FirstAsync(u => u.Id == _contextService.UserId);
+                .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
             
             var newActivity = _manageActivityService.CreateFromRequestData(request, user.Id);
 
@@ -73,10 +74,10 @@ namespace Sportomondo.Api.Services
             _manageActivityService.CalculatePace(newActivity);
             _manageActivityService.CalculateCalories(newActivity, user);
             
-            newActivity.Weather = await _manageActivityService.GetWeatherFromAPIAsync(newActivity);
+            newActivity.Weather = await _manageActivityService.GetWeatherFromAPIAsync(newActivity, cancellationToken);
 
             _dbContext.Activities.Add(newActivity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return newActivity.Id;
         }
@@ -84,20 +85,20 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete activity by Id. Role "Member" can delete only its data.
         /// </summary>
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var activity = await GetFromDbAsync(id);
+            var activity = await GetFromDbAsync(id, cancellationToken);
 
             _dbContext.Activities.Remove(activity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Update activity by Id. Role "Member" can update only its data.
         /// </summary>
-        public async Task UpdateAsync(int id, ActivityRequest request)
+        public async Task UpdateAsync(int id, ActivityRequest request, CancellationToken cancellationToken)
         {
-            var activity = await GetFromDbAsync(id);
+            var activity = await GetFromDbAsync(id, cancellationToken);
 
             var addNewWeather = activity.DateStart.Date != request.DateStart.Date 
                 || activity.City.ToUpper() != request.City.ToUpper();
@@ -122,22 +123,22 @@ namespace Sportomondo.Api.Services
                     _dbContext.Weathers.Remove(currentWeather);
                 }
 
-                var newWeather = await _manageActivityService.GetWeatherFromAPIAsync(activity);
+                var newWeather = await _manageActivityService.GetWeatherFromAPIAsync(activity, cancellationToken);
 
                 activity.Weather = newWeather;
 
                 _dbContext.Weathers.Add(newWeather);
             }
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<Activity> GetFromDbAsync(int id)
+        private async Task<Activity> GetFromDbAsync(int id, CancellationToken cancellationToken)
         {
             var activity = await _dbContext.Activities
                 .Include(a => a.Weather)
                 .Include(a => a.User)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
 
             if (activity == null)
             {

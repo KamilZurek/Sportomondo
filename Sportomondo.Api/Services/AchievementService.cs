@@ -20,16 +20,16 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all achievements
         /// </summary>
-        public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine)
+        public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine, CancellationToken cancellationToken)
         {
             var achievements = await _dbContext.Achievements
                 .Include(a => a.Users)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (onlyMine)
             {
                 var user = await _dbContext.Users
-                    .FirstAsync(u => u.Id == _contextService.UserId);
+                    .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
 
                 achievements = achievements
                                     .Where(a => a.Users.Contains(user))
@@ -42,7 +42,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Create achievement
         /// </summary>
-        public async Task<int> CreateAsync(CreateAchievementRequest request)
+        public async Task<int> CreateAsync(CreateAchievementRequest request, CancellationToken cancellationToken)
         {
             var achievement = new Achievement()
             {
@@ -54,7 +54,7 @@ namespace Sportomondo.Api.Services
             };
 
             _dbContext.Achievements.Add(achievement);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return achievement.Id;
         }
@@ -62,10 +62,10 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete achievement by Id
         /// </summary>
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var achievement = await _dbContext.Achievements
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
 
             if (achievement == null)
             {
@@ -73,23 +73,23 @@ namespace Sportomondo.Api.Services
             }
 
             _dbContext.Achievements.Remove(achievement);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Check and assign achievements to users
         /// </summary>
-        public async Task<string> CheckAsync()
+        public async Task<string> CheckAsync(CancellationToken cancellationToken)
         {
             var achievementsInfo = string.Empty;
             
             var achievements = await _dbContext.Achievements
                 .Include(a => a.Users)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var users = await _dbContext.Users
                 .Include(u => u.Activities)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (_contextService.UserRoleName == Role.MemberRoleName) //Member checks only its achievements
             {
@@ -103,7 +103,7 @@ namespace Sportomondo.Api.Services
                 }
             }
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return achievementsInfo;
         }

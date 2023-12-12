@@ -13,45 +13,45 @@ namespace Sportomondo.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserService _service;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService service)
         {
-            _userService = userService;
+            _service = service;
         }
 
         [HttpPost("register")]
         //no authorization policy
-        public async Task<ActionResult> Register([FromBody] RegisterUserRequest request)
+        public async Task<ActionResult> Register([FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            await _userService.RegisterAsync(request);
+            await _service.RegisterAsync(request, cancellationToken);
 
             return Ok();
         }
 
         [HttpPost("login")]
         //no authorization policy
-        public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request)
+        public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request, CancellationToken cancellationToken)
         {
-            var token = await _userService.LoginAsync(request);
+            var token = await _service.LoginAsync(request, cancellationToken);
 
             return Ok(token);
         }
 
         [HttpPut("changePassword")]
         [Authorize(Policy = Policies.UserChangePassword)]
-        public async Task<ActionResult> ChangePassword([FromBody] ChangeUserPasswordRequest request)
+        public async Task<ActionResult> ChangePassword([FromBody] ChangeUserPasswordRequest request, CancellationToken cancellationToken)
         {
-            await _userService.ChangePasswordAsync(request);
+            await _service.ChangePasswordAsync(request, cancellationToken);
 
             return Ok();
         }
 
         [HttpGet]
         [Authorize(Policy = Policies.UserGetAll)]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAll(CancellationToken cancellationToken)
         {
-            var users = await _userService.GetAllAsync();
+            var users = await _service.GetAllAsync(cancellationToken);
             var results = users.Select(u => u.MapToResponse());
 
             return Ok(results);
@@ -59,18 +59,18 @@ namespace Sportomondo.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Policy = Policies.UserDelete)]
-        public async Task<ActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
-            await _userService.DeleteAsync(id);
+            await _service.DeleteAsync(id, cancellationToken);
 
             return NoContent();
         }
 
         [HttpPut("{id}/changeRole")]
         [Authorize(Policy = Policies.UserChangeRole)]
-        public async Task<ActionResult> ChangeRole([FromRoute] int id, [FromBody] string newRoleName)
+        public async Task<ActionResult> ChangeRole([FromRoute] int id, [FromBody] string newRoleName, CancellationToken cancellationToken)
         {
-            await _userService.ChangeRoleAsync(id, newRoleName);
+            await _service.ChangeRoleAsync(id, newRoleName, cancellationToken);
 
             return Ok();
         }

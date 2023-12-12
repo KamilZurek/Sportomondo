@@ -24,9 +24,9 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get summary for current user
         /// </summary>
-        public async Task<SummaryResponse> GetAsync()
+        public async Task<SummaryResponse> GetAsync(CancellationToken cancellationToken)
         {
-            var user = await GetUserAsync();
+            var user = await GetUserAsync(cancellationToken);
 
             var chartUrl = GetActivitiesChartUrl(user);
             var activitesTotals = GetActivitiesTotals(user);
@@ -42,12 +42,12 @@ namespace Sportomondo.Api.Services
             };
         }
 
-        private async Task<User> GetUserAsync()
+        private async Task<User> GetUserAsync(CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Activities)
                 .Include(u => u.Achievements)
-                .FirstAsync(u => u.Id == _contextService.UserId);
+                .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
 
             return user;
         }

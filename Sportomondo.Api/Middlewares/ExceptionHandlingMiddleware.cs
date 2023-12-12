@@ -56,7 +56,18 @@ namespace Sportomondo.Api.Middlewares
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
 
                 await context.Response.WriteAsync(exceptionMessage);
-            }         
+            }
+            catch (OperationCanceledException ex)
+            {
+                var exceptionMessage = "Error: Operation was canceled." + Environment.NewLine 
+                    + Environment.NewLine + ex.Message;
+
+                _logger.LogError(exceptionMessage);
+
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                await context.Response.WriteAsync(exceptionMessage);
+            }
             catch (Exception ex)
             {
                 var exceptionMessage = "Something went wrong" + Environment.NewLine

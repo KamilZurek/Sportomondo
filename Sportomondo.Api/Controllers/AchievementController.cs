@@ -22,9 +22,9 @@ namespace Sportomondo.Api.Controllers
 
         [HttpGet]
         [Authorize(Policy = Policies.AchievementGetAll)]
-        public async Task<ActionResult<IEnumerable<AchievementResponse>>> GetAll([FromQuery] bool onlyMine)
+        public async Task<ActionResult<IEnumerable<AchievementResponse>>> GetAll([FromQuery] bool onlyMine, CancellationToken cancellationToken)
         {
-            var achievements = await _service.GetAllAsync(onlyMine);
+            var achievements = await _service.GetAllAsync(onlyMine, cancellationToken);
             var results = achievements.Select(a => a.MapToResponse());
 
             return Ok(results);
@@ -32,27 +32,27 @@ namespace Sportomondo.Api.Controllers
 
         [HttpPost]
         [Authorize(Policy = Policies.AchievementCreate)]
-        public async Task<ActionResult> Create([FromBody] CreateAchievementRequest request)
+        public async Task<ActionResult> Create([FromBody] CreateAchievementRequest request, CancellationToken cancellationToken)
         {
-            var createdId = await _service.CreateAsync(request);
+            var createdId = await _service.CreateAsync(request, cancellationToken);
 
             return Created($"api/achievements/{createdId}", null);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Policy = Policies.AchievementDelete)]
-        public async Task<ActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
-            await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id, cancellationToken);
 
             return NoContent();
         }
 
         [HttpPut("check")]
         [Authorize(Policy = Policies.AchievementCheck)]
-        public async Task<ActionResult<string>> Check()
+        public async Task<ActionResult<string>> Check(CancellationToken cancellationToken)
         {
-            var result = await _service.CheckAsync();
+            var result = await _service.CheckAsync(cancellationToken);
 
             return Ok(result);
         }
