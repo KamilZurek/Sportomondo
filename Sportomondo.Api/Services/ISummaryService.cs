@@ -4,6 +4,6 @@ namespace Sportomondo.Api.Services
 {
     public interface ISummaryService
     {
-        Task<SummaryResponse> GetAsync(CancellationToken cancellationToken);
+        Task<SummaryResponse> GetAsync(CancellationToken cancellationToken = default);
     }
 }

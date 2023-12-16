@@ -23,7 +23,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all users' activities. Role "Member" can get only its data.
         /// </summary>
-        public async Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Activity>> GetAllAsync(string searchPhraseNameCity, CancellationToken cancellationToken = default)
         {
             var activities = await _dbContext.Activities
                 .Include(a => a.Weather)
@@ -53,7 +53,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get activity by Id. Role "Member" can request only its data.
         /// </summary>
-        public async Task<Activity> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Activity> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var activity = await GetFromDbAsync(id, cancellationToken);
 
@@ -63,7 +63,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Create activity.
         /// </summary>
-        public async Task<int> CreateAsync(CreateActivityRequest request, CancellationToken cancellationToken)
+        public async Task<int> CreateAsync(CreateActivityRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _dbContext.Users
                 .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
@@ -85,7 +85,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete activity by Id. Role "Member" can delete only its data.
         /// </summary>
-        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             var activity = await GetFromDbAsync(id, cancellationToken);
 
@@ -96,7 +96,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Update activity by Id. Role "Member" can update only its data.
         /// </summary>
-        public async Task UpdateAsync(int id, ActivityRequest request, CancellationToken cancellationToken)
+        public async Task UpdateAsync(int id, ActivityRequest request, CancellationToken cancellationToken = default)
         {
             var activity = await GetFromDbAsync(id, cancellationToken);
 
@@ -133,7 +133,7 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<Activity> GetFromDbAsync(int id, CancellationToken cancellationToken)
+        private async Task<Activity> GetFromDbAsync(int id, CancellationToken cancellationToken = default)
         {
             var activity = await _dbContext.Activities
                 .Include(a => a.Weather)

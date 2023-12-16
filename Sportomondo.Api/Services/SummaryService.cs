@@ -24,7 +24,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get summary for current user
         /// </summary>
-        public async Task<SummaryResponse> GetAsync(CancellationToken cancellationToken)
+        public async Task<SummaryResponse> GetAsync(CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(cancellationToken);
 
@@ -42,7 +42,7 @@ namespace Sportomondo.Api.Services
             };
         }
 
-        private async Task<User> GetUserAsync(CancellationToken cancellationToken)
+        private async Task<User> GetUserAsync(CancellationToken cancellationToken = default)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Activities)

@@ -20,7 +20,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all achievements
         /// </summary>
-        public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Achievement>> GetAllAsync(bool onlyMine, CancellationToken cancellationToken = default)
         {
             var achievements = await _dbContext.Achievements
                 .Include(a => a.Users)
@@ -42,7 +42,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Create achievement
         /// </summary>
-        public async Task<int> CreateAsync(CreateAchievementRequest request, CancellationToken cancellationToken)
+        public async Task<int> CreateAsync(CreateAchievementRequest request, CancellationToken cancellationToken = default)
         {
             var achievement = new Achievement()
             {
@@ -62,7 +62,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete achievement by Id
         /// </summary>
-        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             var achievement = await _dbContext.Achievements
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
@@ -79,7 +79,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Check and assign achievements to users
         /// </summary>
-        public async Task<string> CheckAsync(CancellationToken cancellationToken)
+        public async Task<string> CheckAsync(CancellationToken cancellationToken = default)
         {
             var achievementsInfo = string.Empty;
             

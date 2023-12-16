@@ -31,7 +31,7 @@ namespace Sportomondo.Api.Services
         /// Register user with basic role - "Member".
         /// Validation is executed by FluentValidation
         /// </summary>
-        public async Task RegisterAsync(RegisterUserRequest request, CancellationToken cancellationToken)
+        public async Task RegisterAsync(RegisterUserRequest request, CancellationToken cancellationToken = default)
         {
             var memberRole = await _dbContext.Roles
                .FirstOrDefaultAsync(x => x.Name == Role.MemberRoleName, cancellationToken);
@@ -61,7 +61,7 @@ namespace Sportomondo.Api.Services
         /// Sign in user with provided login and password.
         /// If valid, returns JWT Token
         /// </summary>
-        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request, CancellationToken cancellationToken)
+        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request, CancellationToken cancellationToken = default)
         {
             var user = await GetUserFromDbAsync(request.Email, cancellationToken);
 
@@ -100,7 +100,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Change password for current user
         /// </summary>
-        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request, CancellationToken cancellationToken)
+        public async Task ChangePasswordAsync(ChangeUserPasswordRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _dbContext.Users
                 .FirstAsync(u => u.Id == _contextService.UserId, cancellationToken);
@@ -127,7 +127,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Get all users
         /// </summary>
-        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var users = await _dbContext.Users
                 .Include(u => u.Role)
@@ -141,7 +141,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Delete user by Id. Admin-only
         /// </summary>
-        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             var user = await GetUserFromDbAsync(id, cancellationToken);
 
@@ -152,7 +152,7 @@ namespace Sportomondo.Api.Services
         /// <summary>
         /// Change user's role. Admin-only
         /// </summary>
-        public async Task ChangeRoleAsync(int userId, string newRoleName, CancellationToken cancellationToken)
+        public async Task ChangeRoleAsync(int userId, string newRoleName, CancellationToken cancellationToken = default)
         {
             var user = await GetUserFromDbAsync(userId, cancellationToken);
 
@@ -163,7 +163,7 @@ namespace Sportomondo.Api.Services
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<User> GetUserFromDbAsync(int id, CancellationToken cancellationToken)
+        private async Task<User> GetUserFromDbAsync(int id, CancellationToken cancellationToken = default)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Role)
@@ -178,7 +178,7 @@ namespace Sportomondo.Api.Services
             return user;
         }
 
-        private async Task<User> GetUserFromDbAsync(string email, CancellationToken cancellationToken)
+        private async Task<User> GetUserFromDbAsync(string email, CancellationToken cancellationToken = default)
         {
             var user = await _dbContext.Users
                 .Include(u => u.Role)
@@ -193,7 +193,7 @@ namespace Sportomondo.Api.Services
             return user;
         }
 
-        private async Task<Role> GetRoleFromDbAsync(string roleName, CancellationToken cancellationToken)
+        private async Task<Role> GetRoleFromDbAsync(string roleName, CancellationToken cancellationToken = default)
         {
             var role = await _dbContext.Roles
                     .FirstOrDefaultAsync(x => x.Name == roleName, cancellationToken);

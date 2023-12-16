@@ -65,7 +65,7 @@ namespace Sportomondo.Api.Services
             activity.KcalBurned = user.Weight * (decimal)activity.Time.TotalHours * activity.AverageHr / 20;
         }
 
-        public async Task<Weather> GetWeatherFromAPIAsync(Activity activity, CancellationToken cancellationToken)
+        public async Task<Weather> GetWeatherFromAPIAsync(Activity activity, CancellationToken cancellationToken = default)
         {
             var baseUri = GetApiBaseUri();
             var queryParams = await GetQueryParameters(activity, cancellationToken);
@@ -98,7 +98,7 @@ namespace Sportomondo.Api.Services
             }
         }
 
-        private async Task<string> GetQueryParameters(Activity activity, CancellationToken cancellationToken)
+        private async Task<string> GetQueryParameters(Activity activity, CancellationToken cancellationToken = default)
         {
             var apiKey = GetApiKey();
 
