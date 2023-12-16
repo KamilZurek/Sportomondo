@@ -59,8 +59,7 @@ namespace Sportomondo.Api.Middlewares
             }
             catch (OperationCanceledException ex)
             {
-                var exceptionMessage = "Error: Operation was canceled." + Environment.NewLine 
-                    + Environment.NewLine + ex.Message;
+                var exceptionMessage = "Error: Operation was canceled. " + ex.Message;
 
                 _logger.LogError(exceptionMessage);
 
@@ -70,8 +69,7 @@ namespace Sportomondo.Api.Middlewares
             }
             catch (Exception ex)
             {
-                var exceptionMessage = "Something went wrong" + Environment.NewLine
-                    + Environment.NewLine + ex.Message;
+                var exceptionMessage = "Something went wrong. " + ex.Message;
 
                 _logger.LogError(exceptionMessage);
 
