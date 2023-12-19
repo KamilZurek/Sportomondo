@@ -146,7 +146,9 @@ namespace Sportomondo.Api.Services
                     Count = activitiesByType.Count(),
                     TotalDistance = activitiesByType.Sum(a => a.Distance),
                     TotalTime = GetActivityTypeTotalTime(activitiesByType),
-                    AverageHr = Math.Round(activitiesByType.Average(a => (decimal)a.AverageHr)),
+                    AverageHr = Math.Round(activitiesByType.Any()
+                        ? activitiesByType.Average(a => (decimal)a.AverageHr)
+                        : 0),
                     TotalKcalBurned = activitiesByType.Sum(a => a.KcalBurned)
                 });
             }
