@@ -104,8 +104,9 @@ namespace Sportomondo.Api
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins", policyBuilder =>
+                options.AddPolicy("AllowAnyOrigin", policyBuilder =>
                 {
+                    //basic configuration only for presentation purposes - allow any origin
                     policyBuilder.AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowAnyOrigin();
@@ -114,7 +115,7 @@ namespace Sportomondo.Api
 
             var app = builder.Build();
 
-            app.UseCors("AllowAllOrigins");
+            app.UseCors("AllowAnyOrigin");
 
             var scope = app.Services.CreateScope();
             var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();

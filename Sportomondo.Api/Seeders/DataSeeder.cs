@@ -42,7 +42,7 @@ namespace Sportomondo.Api.Seeders
             if (_dbContext.Database.CanConnect())
             {
                 SeedRoles();
-                SeedRolePermissions(); //nowe akcje - nowy seed od nowa!!!!!
+                SeedRolePermissions(); //nowe akcje - nowy seed od zera (jeżeli można)
                 SeedUsers();
             }
         }

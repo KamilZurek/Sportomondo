@@ -15,11 +15,10 @@ namespace Sportomondo.Api.Models
         public int AverageHr { get; set; }
         public string City { get; set; }
         public decimal KcalBurned { get; set; }
-        public Weather Weather { get; set; } //co z id do pogody w db //czy moze istniec bez pogody?
+        public Weather Weather { get; set; }
         public string RouteUrl { get; set; }
         public int UserId { get; set; }
         public User User { get; set; } // = null!;
-        //czy pprop tylko GET tez doda do db?
 
         public override string ToString()
         {
