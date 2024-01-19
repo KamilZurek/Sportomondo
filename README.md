@@ -7,14 +7,14 @@ The idea of "activity tracker" came up in my head with a simple reason - I reall
 I'm a daily user of Garmin Connect app, prior - Endomondo (a little bit inspiration with its name :D).
 So what was the better solution to implement than something I use quite a lot and it's not Facebook? :)
 
-Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a database and has some extra features like summaries or achievement system. In addition, it lets You manage its users, roles and their permissions.
+Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a relational database and has some extra features like getting weather, summaries and achievement system. In addition, it lets You manage its users, roles and their permissions (for authorization).
 
 More details below :)
 
 ### Tech stack: ###
 
 - C#
-- ASP .NET Core 6
+- ASP.NET Core 6
 - MS SQL Server (2019)
 - Entity Framework Core
 - xUnit
@@ -24,7 +24,7 @@ More details below :)
 - relational MS SQL Server database (diagram at the bottom) with relationships: One-to-one, One-to-many, Many-to-many, using Entity Framework Core (Code-First approach with migrations)
 - JWT Bearer authentication & authorization:
 	- user can authenticate by signing in using its email address and password. If valid - in response user gets a JWT Token with expiration date.
-	- each endpoint has its own authorization policies, which are stored in database as "RolePermisssions" for each user's role. When user calls specific endpoint, API checks user's claims in JWT Token (especially "Role" claim), matches it with endpoint's policy name, searches and checks in database if RolePermission flag "Enabled" is true - then user is authorized.
+	- each endpoint has its own authorization policies, which are stored in a database as "RolePermisssions" for each user's role. When user calls specific endpoint, API checks user's claims in JWT Token (especially "Role" claim), matches it with endpoint's policy name, searches and checks in database if RolePermission flag "Enabled" is true - then user is authorized.
 - asynchronous endpoints and database / web calls with CancellationToken
 - dependency injection approach
 - request models validation (using FluentValidation and attributes)
