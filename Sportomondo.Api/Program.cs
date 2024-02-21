@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Web;
 using Sportomondo.Api.Authorization;
+using Sportomondo.Api.BackgroundServices;
 using Sportomondo.Api.Context;
 using Sportomondo.Api.Middlewares;
 using Sportomondo.Api.Models;
@@ -56,6 +57,9 @@ namespace Sportomondo.Api
 
             builder.Services.AddAuthorizationWithPolicies();
 
+            builder.Services.AddHostedService<ActivitySeriesReminderService>();
+
+            builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

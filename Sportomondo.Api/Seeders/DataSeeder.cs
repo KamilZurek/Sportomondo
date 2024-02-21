@@ -42,8 +42,9 @@ namespace Sportomondo.Api.Seeders
             if (_dbContext.Database.CanConnect())
             {
                 SeedRoles();
-                SeedRolePermissions(); //nowe akcje - nowy seed od zera (jeżeli można)
+                SeedRolePermissions(); //new endpoints with auth. policies -> new "seed" from scratch (if able)
                 SeedUsers();
+                SeedReminders();
             }
         }
 
@@ -76,6 +77,17 @@ namespace Sportomondo.Api.Seeders
                 var users = GetUsersToSeed();
 
                 _dbContext.Users.AddRange(users);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        private void SeedReminders()
+        {
+            if (!_dbContext.Reminders.Any())
+            {
+                var reminders = GetRemindersToSeed();
+
+                _dbContext.Reminders.AddRange(reminders);
                 _dbContext.SaveChanges();
             }
         }
@@ -171,6 +183,19 @@ namespace Sportomondo.Api.Seeders
                 _configuration.GetValue<string>("BaseAdminPasswordToChange"));
 
             return new List<User>() { admin };
+        }
+
+        private IEnumerable<Reminder> GetRemindersToSeed()
+        {
+            return new List<Reminder>()
+            {
+                new Reminder()
+                {
+                    Type = "ActivitySeriesReminder",
+                    Time = new TimeSpan(18, 0, 0),
+                    Enabled = true
+                }
+            };
         }
     }
 }

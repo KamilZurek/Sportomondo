@@ -14,6 +14,7 @@ namespace Sportomondo.Api.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<Reminder> Reminders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,6 +75,13 @@ namespace Sportomondo.Api.Context
             #region Achievement
             modelBuilder.Entity<Achievement>()
                .Property(r => r.Name)
+               .IsRequired()
+               .HasMaxLength(50);
+            #endregion
+
+            #region Reminder
+            modelBuilder.Entity<Reminder>()
+               .Property(r => r.Type)
                .IsRequired()
                .HasMaxLength(50);
             #endregion
