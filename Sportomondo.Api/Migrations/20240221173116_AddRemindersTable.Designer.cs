@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sportomondo.Api.Context;
 
@@ -11,9 +12,10 @@ using Sportomondo.Api.Context;
 namespace Sportomondo.Api.Migrations
 {
     [DbContext(typeof(SportomondoDbContext))]
-    partial class SportomondoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221173116_AddRemindersTable")]
+    partial class AddRemindersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
