@@ -7,7 +7,7 @@ The idea of "activity tracker" came up in my head with a simple reason - I reall
 I'm a daily user of Garmin Connect app, prior - Endomondo (a little bit inspiration with its name :D).
 So what was the better solution to implement than something I use quite a lot and it's not Facebook? :)
 
-Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a relational database and has some extra features like: getting weather, summaries, achievement system and background service for reminders by email. In addition, it lets You manage its users, roles and their permissions (for authorization).
+Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a relational database and has some extra features like: getting weather, generating training summaries (with charts), achievement system and background service for reminders by email. In addition, it lets You manage its users, roles and their permissions (for authorization).
 
 More details below :)
 
