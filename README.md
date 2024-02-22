@@ -7,7 +7,7 @@ The idea of "activity tracker" came up in my head with a simple reason - I reall
 I'm a daily user of Garmin Connect app, prior - Endomondo (a little bit inspiration with its name :D).
 So what was the better solution to implement than something I use quite a lot and it's not Facebook? :)
 
-Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a relational database and has some extra features like getting weather, summaries and achievement system. In addition, it lets You manage its users, roles and their permissions (for authorization).
+Generally it's a REST WebAPI which tracks Your activity (workouts) by saving data in a relational database and has some extra features like: getting weather, summaries, achievement system and background service for reminders by email. In addition, it lets You manage its users, roles and their permissions (for authorization).
 
 More details below :)
 
@@ -50,12 +50,13 @@ More details below :)
 		- 3 predefined roles for users: Admin (high permissions), Support (medium permissions), Member (lowest permissions):
 			- all role's permissions can be changed individually in database / json file (when seeding database)
 			- "RolePermission" is an object which tells if user's role is authorized for particular action (flag "Enabled")
+- background service - hosted service which checks every hour if users have X activities in a row, then reminds about it by sending emails (schedule in database table - "Reminders")
 - using external APIs:
 	- to get Weather object for Activity (WeatherAPI)
 	- to get activity chart for Summary (QuickChartAPI)
 - seeding database feature:
 	- applying pending migrations
-	- seeding data with roles, role permissions and user (Admin)
+	- seeding data with roles, role permissions, reminders and user (Admin)
 - xUnit integration tests for ActivityController:
 	- database: EntityFrameworkCore.InMemory approach
 	- fake authentication & authorization
