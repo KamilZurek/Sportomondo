@@ -66,11 +66,13 @@ More details below :)
 
 ### Further development: ###
 
+- Clean architecture - split WebAPI project into smaller librariers
 - API versioning
+- frontend?
 
 ### Database diagram: ###
 
-![image](https://github.com/KamilZurek/Sportomondo/assets/107115837/47c4ed2e-7c7b-4eb2-9891-d5be3df392ca)
+![image](https://github.com/KamilZurek/Sportomondo/assets/107115837/43b65a82-dd81-48c6-bf39-6c633471637d)
 
 ### Swagger preview: ###
 
